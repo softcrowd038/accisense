@@ -11,9 +11,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   Future<void> resetPassword(BuildContext context, String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      // Password reset email sent successfully
-      // Provide feedback to the user
-
+    
       showDialog(
         context: context,
         builder: (BuildContext context) {
