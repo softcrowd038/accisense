@@ -30,23 +30,20 @@ class CommonTextFormfield extends StatelessWidget {
       decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Colors.white,
+          border: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey,
               width: 1,
             ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Colors.white,
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey,
               width: 1,
             ),
           ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
+          errorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
               color: Colors.red,
               width: 1,
             ),

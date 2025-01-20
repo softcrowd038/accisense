@@ -1,12 +1,11 @@
 import 'dart:io';
+import 'package:accident/Presentation/Accident_Detection/Pages/get_data.dart';
 import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
 import 'package:accident/Presentation/Profile/Pages/edit_profile.dart';
 import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_user_personel_details.dart';
-import 'package:accident/Presentation/login_and_registration/Services/auth_session.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({Key? key}) : super(key: key);
@@ -43,141 +42,142 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: _userData == null
           ? const Center(
               child: CircularProgressIndicator(
-                color: Colors.purple,
+                color: Color(0xff020053),
               ),
             )
-          : SafeArea(
-              child: OrientationBuilder(
-                builder: (context, orientation) => Stack(
-                  children: [
-                    const Divider(
-                      color: Colors.orange,
-                      thickness: 2,
-                    ),
-                    if (_userData != null)
-                      Positioned(
-                        top: orientation == Orientation.portrait ? 100 : 70,
-                        left: orientation == Orientation.portrait
-                            ? MediaQuery.of(context).size.width / 2 - 70
-                            : MediaQuery.of(context).size.width / 7 - 70,
-                        child: Hero(
-                          tag: 'user_avatar',
-                          child: Container(
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (_userData != null)
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.13,
+                            width: MediaQuery.of(context).size.height * 0.13,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
-                              borderRadius: orientation == Orientation.portrait
-                                  ? BorderRadius.circular(70)
-                                  : BorderRadius.circular(100),
+                              border: Border.all(
+                                  color: const Color(0xff020053), width: 2),
+                              borderRadius: BorderRadius.circular(
+                                MediaQuery.of(context).size.height * 0.065,
+                              ),
                             ),
-                            child: CircleAvatar(
-                              radius: orientation == Orientation.portrait
-                                  ? 70
-                                  : 100,
-                              backgroundImage:
-                                  FileImage(File(_userData!.imageurl ?? '')),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.12,
+                              width: MediaQuery.of(context).size.height * 0.12,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.height * 0.065,
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                radius:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                backgroundImage:
+                                    FileImage(File(_userData!.imageurl ?? '')),
+                              ),
                             ),
                           ),
-                        ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EditProfileDetails(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                  borderRadius: BorderRadius.circular(
+                                    MediaQuery.of(context).size.height * 0.02,
+                                  ),
+                                  color: const Color(0xff020053),
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    if (_userData != null)
-                      Positioned(
-                        top: 250.0,
-                        left: MediaQuery.of(context).size.width / 3.3,
-                        child: Center(
-                          child: Text(
-                            _userData!.name ?? '',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.4),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25),
-                          ),
-                        ),
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                          physics: const BouncingScrollPhysics(
-                            decelerationRate: ScrollDecelerationRate.normal,
-                          ),
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CustomUserPersonalDetails(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-      floatingActionButton: OrientationBuilder(
-        builder: (context, orientation) => Stack(
-          children: [
-            Positioned(
-              right: 0,
-              bottom: orientation == Orientation.portrait ? 120 : 70,
-              child: FloatingActionButton(
-                heroTag: 'edit_button', // Unique tag for the edit button
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfileDetails(),
                     ),
-                  );
-                },
-                elevation: 2,
-                backgroundColor: Colors.purple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  if (_userData != null)
+                    Center(
+                      child: Text(
+                        _userData!.name ?? '',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  if (_userData != null)
+                    Center(
+                      child: Text(
+                        '+91 ${_userData!.phone}' ?? '',
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.0160,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xff020053),
+                        ),
+                      ),
+                    ),
+                  if (_userData != null)
+                    Center(
+                      child: Text(
+                        '${_userData!.email}' ?? '',
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.0160,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  const CustomUserPersonalDetails(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.height * 0.012),
+                    child: Text(
+                      'Accident History',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.0240,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const AccidentListWidget()
+                ],
               ),
             ),
-            Positioned(
-              right: 0,
-              bottom: orientation == Orientation.portrait ? 50 : 140,
-              child: FloatingActionButton(
-                heroTag: 'logout_button', // Unique tag for the logout button
-                onPressed: () {
-                  Provider.of<AuthSessionProvider>(context, listen: false)
-                      .logout(context);
-                },
-                elevation: 2,
-                backgroundColor: Colors.purple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

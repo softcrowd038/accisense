@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          fontFamily: 'Montserrat',
+          fontFamily: 'Roboto',
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: Colors.black,
             selectedItemColor: Colors.blue[300],
@@ -33,8 +33,6 @@ class _MyAppState extends State<MyApp> {
               case AuthStatus.authenticated:
                 return const HomePage();
               case AuthStatus.unauthenticated:
-                return const SplashScreen();
-              default:
                 return const SplashScreen();
             }
           },

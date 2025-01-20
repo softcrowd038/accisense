@@ -33,27 +33,26 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       validator: validator,
       keyboardType: keyboardType,
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(
+          color: Colors.grey,
+          fontSize: MediaQuery.of(context).size.height * 0.018),
       decoration: InputDecoration(
         fillColor: Colors.transparent,
         filled: true,
-        border: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(0),
-          borderSide: const BorderSide(
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
             color: Colors.white,
             width: 1,
           ),
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Colors.white,
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
             width: 1,
           ),
         ),
-        errorBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
             color: Colors.red,
             width: 1,
           ),

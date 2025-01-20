@@ -27,8 +27,7 @@ class AccidentListWidget extends StatelessWidget {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 245, 199, 130)),
+            decoration: const BoxDecoration(color: Colors.white),
             child: ListView.builder(
               itemCount: accidents.length,
               itemBuilder: (context, index) {
@@ -38,82 +37,116 @@ class AccidentListWidget extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.date_range,
-                                  size: 20,
-                                  color: Color.fromARGB(255, 219, 65, 247),
-                                ),
-                                Padding(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: const [
+                          BoxShadow(
+                              offset: Offset(0, 1),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              color: Color.fromARGB(255, 219, 219, 219))
+                        ]),
+                    child: Padding(
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.012),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Text(
-                                    accident.date,
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color.fromARGB(255, 94, 94, 94),
+                                    accident.location,
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.018,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    accident.time,
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      color: Color.fromARGB(255, 94, 94, 94),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.014,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.date_range,
+                                    size: MediaQuery.of(context).size.height *
+                                        0.025,
+                                    color: Colors.blue,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      accident.date,
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.016,
+                                        color: const Color.fromARGB(
+                                            255, 94, 94, 94),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _showDeleteConfirmationDialog(
-                                    context, accident);
-                              },
-                              child: const Icon(
-                                Icons.delete,
-                                size: 25,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 4.0),
-                        Row(
-                          children: [
-                            const IconWidget(
-                              icon: Icons.location_history,
-                              color: Color.fromARGB(255, 255, 230, 0),
-                              size: 20,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  accident.location,
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.height *
+                                        0.014,
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.av_timer,
+                                        size:
+                                            MediaQuery.of(context).size.height *
+                                                0.025,
+                                        color: Colors.green,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          accident.time,
+                                          style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.016,
+                                            color:
+                                                Color.fromARGB(255, 94, 94, 94),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              GestureDetector(
+                                onTap: () {
+                                  _showDeleteConfirmationDialog(
+                                      context, accident);
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  size: MediaQuery.of(context).size.height *
+                                      0.025,
+                                  color: Colors.red,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

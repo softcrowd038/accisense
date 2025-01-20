@@ -6,7 +6,6 @@ import 'package:accident/Presentation/dashboard/components/auto_scroll_icon_caro
 import 'package:accident/Presentation/dashboard/components/container_reuse.dart';
 import 'package:accident/Presentation/dashboard/components/seconadary_components/text_widget.dart';
 import 'package:accident/Presentation/dashboard/components/wide_container_with_text.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,32 +18,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   @override
-  void initState() {
-    super.initState();
-    _checkNetworkConnectivity();
-  }
-
-  Future<void> _checkNetworkConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Device is not connected to the network.'),
-        ),
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SpeedTrackerNotifier>(
-          create: (_) => SpeedTrackerNotifier()..requestLocationPermission(),
+          create: (_) => SpeedTrackerNotifier(),
         ),
         ChangeNotifierProvider<AltitudeTracker>(
-          create: (_) => AltitudeTracker()..requestLocationPermission(),
+          create: (_) => AltitudeTracker(),
         ),
         ChangeNotifierProvider<NavigationProvider>(
           create: (_) => NavigationProvider(),
@@ -55,8 +36,7 @@ class _MainPageState extends State<MainPage> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 245, 199, 130)),
+            decoration: const BoxDecoration(color: Colors.white),
             child: Column(
               children: [
                 Row(

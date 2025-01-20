@@ -47,7 +47,8 @@ class HomePageState extends State<HomePage> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const MainPage(),
-    const AccidentListWidget(),
+    // const AccidentListWidget(),
+    const UserProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -59,74 +60,40 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 199, 130),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 253, 228, 1)),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/logo.png"),
-                  height: 50,
-                  width: 50,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Welcome !",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    if (_userData != null)
-                      Consumer<UserCredentials>(
-                        builder: (context, userCredentials, child) {
-                          return Text(
-                            "${_userData!.name ?? ''} ",
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
-                          );
-                        },
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const UserProfilePage()),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image(
+                    image: const AssetImage("assets/images/logo1.png"),
+                    height: MediaQuery.of(context).size.height * 0.10,
+                    width: MediaQuery.of(context).size.height * 0.10,
                   ),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 1),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: _userData == null
-                    ? const CircularProgressIndicator(
-                        color: Colors.yellow,
-                      )
-                    : CircleAvatar(
-                        radius: 20,
-                        backgroundImage:
-                            _userData != null && _userData!.imageurl != null
-                                ? FileImage(File(_userData!.imageurl!))
-                                : null,
-                      ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.035,
+              left: MediaQuery.of(context).size.width * 0.17,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Accidetect",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
           ],
@@ -135,9 +102,9 @@ class HomePageState extends State<HomePage> {
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.orange,
-        selectedItemColor: Colors.purple,
-        unselectedItemColor: Colors.white,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xff020053),
+        unselectedItemColor: Colors.grey,
         elevation: 5,
         currentIndex: _selectedIndex,
         items: const [
@@ -145,9 +112,13 @@ class HomePageState extends State<HomePage> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.history),
+          //   label: 'History',
+          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
+            icon: Icon(Icons.person_pin_rounded),
+            label: 'Profile',
           ),
         ],
         onTap: _onItemTapped,

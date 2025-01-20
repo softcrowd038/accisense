@@ -56,187 +56,229 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xff020053),
       body: Consumer<UserCredentials>(
         builder: (context, userCredentials, child) => Form(
           key: _formKey,
           child: OrientationBuilder(
             builder: (context, orientation) => SafeArea(
               child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                              padding: EdgeInsets.only(left: 15.0, bottom: 8.0),
-                              child: Center(
-                                child: Text(
-                                  "SIGNUP",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 0)),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.0200,
+                        ),
+                        child: Stack(
+                          children: [
+                            Image(
+                                image: const AssetImage(
+                                  'assets/images/logo1.png',
                                 ),
-                              )),
-                          const Padding(
-                              padding:
-                                  EdgeInsets.only(left: 15.0, bottom: 15.0),
-                              child: Center(
-                                child: Text(
-                                  "Create Your Awesome Account Here!",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                          Color.fromARGB(255, 0, 0, 0)),
-                                ),
-                              )),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15.0,
-                              right: 15.0,
-                              bottom: 10,
-                            ),
-                            child: CommonTextFormfield(
-                              onChanged: (value) {
-                                _updateUsername(value);
-                              },
-                              label: "Username",
-                              hint: "Peter Parker",
-                              obscure: false,
-                              controller: _usernameController,
-                              suffixIcon: const Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Enter the Username first!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15.0,
-                              right: 15.0,
-                              bottom: 10,
-                            ),
-                            child: CommonTextFormfield(
-                              onChanged: (value) {
-                                _updateEmail(value);
-                              },
-                              label: "Email",
-                              hint: "xyz@abc.pqr",
-                              obscure: false,
-                              controller: _emailController,
-                              suffixIcon: const Icon(
-                                Icons.email,
-                                color: Colors.white,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Enter the Email first!";
-                                }
-                                if (!regexe.hasMatch(value)) {
-                                  return "Enter Valid Email Format!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15.0,
-                              right: 15.0,
-                              bottom: 15,
-                            ),
-                            child: CommonTextFormfield(
-                              onChanged: (value) {
-                                _updatePassword(value);
-                              },
-                              label: "Password",
-                              hint: "MNop1234@#",
-                              obscure: true,
-                              controller: _passwordController,
-                              suffixIcon: const Icon(
-                                Icons.key,
-                                color: Colors.white,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Enter the Password first!";
-                                }
-                                if (value.length < 8) {
-                                  return "Password is too short, Enter up to 8 digits!";
-                                }
-                                if (!regexpa.hasMatch(value)) {
-                                  return "Use Alphabets(capital and small), symbols and numbers only in the password";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (_formKey.currentState!.validate()) {
-                                UiHelper(context).signUp(
-                                  _emailController.text.trim(),
-                                  _passwordController.text.trim(),
-                                );
-                              }
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.0,
-                                  right: 15.0,
-                                  top: 15.0,
-                                  bottom: 8.0),
-                              child: CustomButton(
-                                buttonText: "Signup",
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "Already have an account?",
+                                height:
+                                    MediaQuery.of(context).size.height * 0.180,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.180),
+                            Positioned(
+                              top: MediaQuery.of(context).size.height * 0.140,
+                              left: MediaQuery.of(context).size.height * 0.045,
+                              child: Text(
+                                'ACCIDETECT',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 105, 105, 105),
-                                ),
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            0.0140,
+                                    color: Colors.white),
                               ),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginPage()));
-                                  },
-                                  child: const Text(
-                                    "Signin",
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                            )
+                          ],
+                        ),
+                      ),
+                      ClipPath(
+                        clipper: CustomDiagonalClipper(),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.75,
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 15.0, bottom: 8.0),
+                                  child: Center(
+                                    child: Text(
+                                      "SignUp",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(255, 0, 0, 0)),
                                     ),
                                   )),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  right: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  bottom: MediaQuery.of(context).size.height *
+                                      0.010,
+                                ),
+                                child: CommonTextFormfield(
+                                  onChanged: (value) {
+                                    _updateUsername(value);
+                                  },
+                                  label: "Username",
+                                  hint: "Peter Parker",
+                                  obscure: false,
+                                  controller: _usernameController,
+                                  suffixIcon: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter the Username first!";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  right: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  bottom: MediaQuery.of(context).size.height *
+                                      0.010,
+                                ),
+                                child: CommonTextFormfield(
+                                  onChanged: (value) {
+                                    _updateEmail(value);
+                                  },
+                                  label: "Email",
+                                  hint: "xyz@abc.pqr",
+                                  obscure: false,
+                                  controller: _emailController,
+                                  suffixIcon: const Icon(
+                                    Icons.email,
+                                    color: Colors.white,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter the Email first!";
+                                    }
+                                    if (!regexe.hasMatch(value)) {
+                                      return "Enter Valid Email Format!";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  right: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  bottom: MediaQuery.of(context).size.height *
+                                      0.010,
+                                ),
+                                child: CommonTextFormfield(
+                                  onChanged: (value) {
+                                    _updatePassword(value);
+                                  },
+                                  label: "Password",
+                                  hint: "MNop1234@#",
+                                  obscure: true,
+                                  controller: _passwordController,
+                                  suffixIcon: const Icon(
+                                    Icons.key,
+                                    color: Colors.white,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter the Password first!";
+                                    }
+                                    if (value.length < 8) {
+                                      return "Password is too short, Enter up to 8 digits!";
+                                    }
+                                    if (!regexpa.hasMatch(value)) {
+                                      return "Use Alphabets(capital and small), symbols and numbers only in the password";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    UiHelper uiHelper = UiHelper(context);
+                                    uiHelper.signUp(_emailController.text,
+                                        _passwordController.text);
+                                  }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.height *
+                                        0.008,
+                                    right: MediaQuery.of(context).size.height *
+                                        0.008,
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.010,
+                                    top: MediaQuery.of(context).size.height *
+                                        0.015,
+                                  ),
+                                  child: const CustomButton(
+                                    buttonText: "Signup",
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Already have an account?",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.018,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginPage()));
+                                      },
+                                      child: Text(
+                                        "Signin",
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.018,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -246,4 +288,56 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
     );
   }
+}
+
+class CustomDiagonalClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double borderRadius = 20.0; // Radius for rounded corners
+    double trimPercentage = 0.25; // 25% trim on left and right sides
+
+    Path path = Path();
+
+    // Start from the top-left corner
+    path.moveTo(0, borderRadius);
+
+    // Top-left rounded corner
+    path.arcToPoint(
+      Offset(borderRadius, 0),
+      radius: Radius.circular(borderRadius),
+      clockwise: false,
+    );
+
+    // Move to the left trim point (25% of width)
+    double leftTrimX = size.width * trimPercentage;
+    path.lineTo(leftTrimX, 0);
+
+    // Line to the middle of the top
+    path.lineTo(size.width / 2, size.height * 0.1);
+
+    // Line to the right trim point (25% of width from the right)
+    double rightTrimX = size.width * (1 - trimPercentage);
+    path.lineTo(rightTrimX, 0);
+
+    // Top-right rounded corner
+    path.arcToPoint(
+      Offset(size.width, borderRadius),
+      radius: Radius.circular(borderRadius),
+      clockwise: false,
+    );
+
+    // Line down the right side
+    path.lineTo(size.width, size.height);
+
+    // Line across the bottom
+    path.lineTo(0, size.height);
+
+    // Close the path
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

@@ -91,6 +91,7 @@ class ProfilePageModel extends ChangeNotifier {
 
   void setGender(String? gender) {
     this.gender = gender;
+
     notifyListeners();
   }
 }

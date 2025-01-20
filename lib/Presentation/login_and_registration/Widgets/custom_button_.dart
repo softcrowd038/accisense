@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Colors.purple,
+        color: const Color(0xff020053),
         borderRadius: BorderRadius.circular(5),
       ),
       child: Center(
@@ -24,20 +24,12 @@ class CustomButton extends StatelessWidget {
             Text(
               buttonText,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.020,
                 color: Colors.white,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(
-              width: 3,
-            ),
-            const Icon(
-              Icons.arrow_forward,
-              size: 20,
-              color: Colors.white,
-            )
           ],
         ),
       ),

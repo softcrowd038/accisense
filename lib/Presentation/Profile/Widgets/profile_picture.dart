@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
+// ignore_for_file: avoid_print
 
 import 'dart:io';
 
@@ -40,7 +40,7 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
       if (!mounted) return;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('No image selected')));
+            .showSnackBar(const SnackBar(content: Text('No image selected')));
       });
     }
   }
@@ -62,14 +62,14 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
       if (!mounted) return;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Image not found in Firestore')));
+            const SnackBar(content: Text('Image not found in Firestore')));
       });
     } catch (e) {
       print('Error retrieving image from Firestore: $e');
       if (!mounted) return;
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Failed to retrieve image')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to retrieve image')));
       });
     }
   }
@@ -77,24 +77,55 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
   @override
   Widget build(BuildContext context) {
     final profileModel = Provider.of<ProfilePageModel>(context);
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(50),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.12,
+          width: MediaQuery.of(context).size.height * 0.12,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.height * 0.06),
+              boxShadow: const [
+                BoxShadow(
+                    offset: Offset(0, 1),
+                    spreadRadius: 2,
+                    blurRadius: 9,
+                    color: Color.fromARGB(255, 214, 214, 214))
+              ]),
           child: CircleAvatar(
-            radius: 50,
+            radius: MediaQuery.of(context).size.height * 0.06,
+            backgroundColor: Colors.white,
             backgroundImage: profileModel.imageurl != null
                 ? FileImage(File(profileModel.imageurl!))
                 : null,
             child: profileModel.imageurl == null
-                ? const Icon(Icons.person, size: 50)
+                ? Icon(
+                    Icons.person,
+                    size: MediaQuery.of(context).size.height * 0.06,
+                    color: const Color(0xff020053),
+                  )
                 : null,
           ),
         ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: _getImage,
-          child: Text('Select Profile Picture'),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: GestureDetector(
+            onTap: _getImage,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+                size: MediaQuery.of(context).size.height * 0.03,
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:accident/Presentation/Navigation/page_navigation.dart';
 import 'package:accident/Presentation/login_and_registration/pages/login_registration.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginPage()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
     });
   }
@@ -31,26 +32,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black,
+    return Scaffold(
+      backgroundColor: const Color(0xff020053),
       body: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image(
-                image: AssetImage("assets/images/logo.png"),
-                height: 250,
-                width: 250,
+                image: const AssetImage("assets/images/logo.jpeg"),
+                height: MediaQuery.of(context).size.height * 0.250,
+                width: MediaQuery.of(context).size.height * 0.250,
               ),
-              Text(
-                "ACCIDETECT",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5),
-              )
             ]),
       ),
     );

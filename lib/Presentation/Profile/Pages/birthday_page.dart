@@ -1,9 +1,7 @@
-import 'package:accident/Presentation/Navigation/page_navigation.dart';
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
+import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_calender.dart';
+import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class BirthDatePage extends StatefulWidget {
   const BirthDatePage({super.key});
@@ -17,19 +15,47 @@ class _BirthDatePageState extends State<BirthDatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Text(
+              'CREATE YOUR ACCOUNT',
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                  fontWeight: FontWeight.w800),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.height * 0.018,
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: const Color.fromARGB(255, 177, 177, 177),
+              size: MediaQuery.of(context).size.height * 0.018,
+            ),
+            Text(
+              'step 4',
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.018,
+                  fontWeight: FontWeight.w100),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Image(image: AssetImage("assets/images/birthday.png")),
-            const Padding(
-              padding: EdgeInsets.all(15.0),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
               child: Text(
-                "SELECT YOUR BIRTHDAY 🎉 ",
+                "select your birthday 🎉 ",
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
+                    color: const Color(0xff020053),
+                    fontSize: MediaQuery.of(context).size.height * 0.018,
+                    fontWeight: FontWeight.w300),
               ),
             ),
             Padding(
@@ -38,34 +64,23 @@ class _BirthDatePageState extends State<BirthDatePage> {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(1800),
                   lastDate: DateTime(2300)),
-            )
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const ContactListScreen())));
+              },
+              child: Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.height * 0.008),
+                child: const CustomButton(
+                  buttonText: "Next",
+                ),
+              ),
+            ),
           ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final profilePageProvider =
-              Provider.of<ProfilePageModel>(context, listen: false);
-          FireStoreProfileData().storeUserData(
-            profilePageProvider.imageurl,
-            profilePageProvider.name,
-            profilePageProvider.email,
-            profilePageProvider.phone,
-            profilePageProvider.emergencyContactName,
-            profilePageProvider.relation,
-            profilePageProvider.emergencyPhone,
-            profilePageProvider.address,
-            profilePageProvider.birthdate,
-            profilePageProvider.gender,
-          );
-          Navigator.push(context,
-              MaterialPageRoute(builder: ((context) => const HomePage())));
-        },
-        backgroundColor: Colors.purple,
-        child: const Icon(
-          Icons.arrow_forward_ios,
-          size: 30,
-          color: Colors.black,
-        ),
-      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:accident/Presentation/Navigation/page_navigation.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
 import 'package:accident/Presentation/login_and_registration/Services/signup_signin.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/common_textform_field.dart';
@@ -51,52 +52,64 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xff020053),
       body: Consumer<UserCredentials>(
         builder: (context, userCredentials, child) => Form(
           key: _formKey,
-          child: Center(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(children: [
+                Padding(
+                  padding: EdgeInsets.all(
+                    MediaQuery.of(context).size.height * 0.0200,
+                  ),
+                  child: Stack(
+                    children: [
+                      Image(
+                          image: const AssetImage(
+                            'assets/images/logo1.png',
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.180,
+                          width: MediaQuery.of(context).size.height * 0.180),
+                      Positioned(
+                        top: MediaQuery.of(context).size.height * 0.140,
+                        left: MediaQuery.of(context).size.height * 0.045,
+                        child: Text(
+                          'ACCIDETECT',
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.0140,
+                              color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                ClipPath(
+                  clipper: CustomDiagonalClipper(),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.73,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Padding(
-                            padding: EdgeInsets.only(left: 15.0, bottom: 8.0),
-                            child: Center(
-                              child: Text(
-                                "SIGNIN",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            )),
-                        const Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.0, bottom: 15.0, right: 15.0),
-                            child: Center(
-                              child: Text(
-                                "Login And Unlock Your  Safety!",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 0, 0, 0)),
-                              ),
-                            )),
-                        const SizedBox(
-                          height: 30,
+                        Text(
+                          "Login",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.035,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                            right: 15.0,
-                            bottom: 10,
+                          padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.height * 0.008,
+                            right: MediaQuery.of(context).size.height * 0.008,
+                            bottom: MediaQuery.of(context).size.height * 0.008,
                           ),
                           child: CommonTextFormfield(
                             onChanged: (value) {
@@ -122,10 +135,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                            right: 15.0,
-                            bottom: 15,
+                          padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.height * 0.008,
+                            right: MediaQuery.of(context).size.height * 0.008,
+                            bottom: MediaQuery.of(context).size.height * 0.008,
                           ),
                           child: CommonTextFormfield(
                             onChanged: (value) {
@@ -164,71 +177,120 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: ((context) =>
                                               ForgotPasswordScreen())));
                                 },
-                                child: const Text(
+                                child: Text(
                                   " Forget password?",
                                   style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color.fromARGB(255, 92, 92, 92)),
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.016,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey),
                                 )),
                           ],
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              UiHelper(context).signIn(
-                                _emailController.text.trim(),
-                                _passwordController.text.trim(),
-                              );
+                            if (_formKey.currentState?.validate() ?? false) {
+                              UiHelper uiHelper = UiHelper(context);
+                              uiHelper.signIn(_emailController.text,
+                                  _passwordController.text);
                             }
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: CustomButton(
-                              buttonText: "SignIn",
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.height * 0.008),
+                            child: const CustomButton(
+                              buttonText: "Log In",
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "Don't have an account?",
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.018,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegistrationPage()));
+                              },
+                              child: Text(
+                                "SignUp",
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 105, 105, 105),
+                                  color: Colors.blueAccent,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.018,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegistrationPage()));
-                                },
-                                child: Text(
-                                  "SignUp",
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
+              ]),
             ),
           ),
         ),
       ),
     );
   }
+}
+
+class CustomDiagonalClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double borderRadius = 20.0;
+    double trimPercentage = 0.25;
+
+    Path path = Path();
+
+    path.moveTo(0, borderRadius);
+
+    path.arcToPoint(
+      Offset(borderRadius, 0),
+      radius: Radius.circular(borderRadius),
+      clockwise: false,
+    );
+
+    double leftTrimX = size.width * trimPercentage;
+    path.lineTo(leftTrimX, 0);
+
+    path.lineTo(size.width / 2, size.height * 0.1);
+
+    double rightTrimX = size.width * (1 - trimPercentage);
+    path.lineTo(rightTrimX, 0);
+
+    path.arcToPoint(
+      Offset(size.width, borderRadius),
+      radius: Radius.circular(borderRadius),
+      clockwise: false,
+    );
+
+    // Line down the right side
+    path.lineTo(size.width, size.height);
+
+    // Line across the bottom
+    path.lineTo(0, size.height);
+
+    // Close the path
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

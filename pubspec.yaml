@@ -60,6 +60,9 @@ dependencies:
   workmanager:
   connectivity_plus:
   awesome_notifications:
+  contacts_service:
+  intl:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

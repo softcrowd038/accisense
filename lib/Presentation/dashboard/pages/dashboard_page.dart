@@ -21,13 +21,11 @@ class LiveLocationTrackerState extends State<LiveLocationTracker> {
   @override
   void initState() {
     super.initState();
-    // Request location permission and get the current location after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<LocationProvider>(context, listen: false)
           .requestLocationPermissionAndGetCurrentLocation();
     });
 
-    // Hide the initial message after 5 seconds
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
         setState(() {
@@ -58,11 +56,9 @@ class LiveLocationTrackerState extends State<LiveLocationTracker> {
   void _handleDoubleTap() {
     setState(() {
       _isTextVisible = true;
-
-      // Show current address container
       _showCurrentAddress = true;
 
-      // Hide current address container after 3 seconds
+
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
           setState(() {
