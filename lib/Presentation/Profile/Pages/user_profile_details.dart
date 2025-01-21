@@ -139,7 +139,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   if (_userData != null)
                     Center(
                       child: Text(
-                        '+91 ${_userData!.phone}' ?? '',
+                        '+91 ${_userData!.phone}',
                         style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * 0.0160,
                           fontWeight: FontWeight.w400,
@@ -150,7 +150,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   if (_userData != null)
                     Center(
                       child: Text(
-                        '${_userData!.email}' ?? '',
+                        '${_userData!.email}',
                         style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * 0.0160,
                           fontWeight: FontWeight.w400,

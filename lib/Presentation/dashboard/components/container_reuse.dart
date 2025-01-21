@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class ReuseContainer extends StatelessWidget {
   final Color color;
   final Color iconColor;
-  final String speed;
+  final String value;
+  final String title;
   final IconData icon;
   final double? height;
   final double? width;
@@ -14,7 +15,8 @@ class ReuseContainer extends StatelessWidget {
   const ReuseContainer(
       {super.key,
       required this.color,
-      required this.speed,
+      required this.value,
+      required this.title,
       required this.icon,
       required this.height,
       required this.width,
@@ -23,37 +25,42 @@ class ReuseContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius:
-              BorderRadius.circular(MediaQuery.of(context).size.width * 0.020),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 5,
-                offset: const Offset(0, 1),
-                spreadRadius: 2)
-          ]),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconWidget(
+    return Column(
+      children: [
+        Container(
+          height: height,
+          width: width,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.20),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    offset: const Offset(0, 1),
+                    spreadRadius: 2)
+              ]),
+          child: IconWidget(
             icon: icon,
             size: size,
             color: iconColor,
           ),
-          TextWidget(
-            text1: speed,
-            color: Colors.black,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ],
-      ),
+        ),
+        TextWidget(
+          text1: value,
+          color: Colors.black,
+          fontSize: MediaQuery.of(context).size.height * 0.018,
+          fontWeight: FontWeight.bold,
+        ),
+        TextWidget(
+          text1: title,
+          color: Colors.grey,
+          fontSize: MediaQuery.of(context).size.height * 0.016,
+          fontWeight: FontWeight.w400,
+        ),
+      ],
     );
   }
 }

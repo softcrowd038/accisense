@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class SpeedTrackerNotifier extends ChangeNotifier {
   double _speed = 0.0;
-  Color _color = Colors.white;
+  Color _color = Colors.green;
   StreamSubscription<Position>? _positionStreamSubscription;
 
   double get speed => _speed;
@@ -38,7 +38,7 @@ class SpeedTrackerNotifier extends ChangeNotifier {
   void _updateSpeed(double newSpeed) {
     _speed = newSpeed;
     if (_speed <= 70.0) {
-      _color = Colors.white;
+      _color = Colors.green;
     } else {
       _color = Colors.red;
     }

@@ -1,13 +1,9 @@
-import 'dart:io';
-import 'package:accident/Presentation/Accident_Detection/Pages/get_data.dart';
 import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
 import 'package:accident/Presentation/Profile/Pages/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
 import 'package:accident/Presentation/dashboard/pages/home_page.dart';
-import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

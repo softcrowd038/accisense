@@ -4,7 +4,6 @@ import 'package:accident/Presentation/dashboard/Utils/navigation_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/speed_provider.dart';
 import 'package:accident/Presentation/dashboard/components/auto_scroll_icon_carosel.dart';
 import 'package:accident/Presentation/dashboard/components/container_reuse.dart';
-import 'package:accident/Presentation/dashboard/components/seconadary_components/text_widget.dart';
 import 'package:accident/Presentation/dashboard/components/wide_container_with_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,159 +31,199 @@ class _MainPageState extends State<MainPage> {
         ),
       ],
       child: SingleChildScrollView(
-        child: OrientationBuilder(builder: (context, orientation) {
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(color: Colors.white),
-            child: Column(
+          child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: const LiveLocationTracker(),
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: Text(
+                'Statistics and Helpline',
+                style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).height * 0.022,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: MediaQuery.sizeOf(context).height * 0.018,
-                                top: MediaQuery.sizeOf(context).height * 0.015,
-                              ),
-                              child: Consumer<SpeedTrackerNotifier>(
-                                builder: (context, speedTracker, child) {
-                                  return ReuseContainer(
-                                    color: speedTracker.color,
-                                    speed:
-                                        '${speedTracker.speed.toStringAsFixed(2)} m/s',
-                                    icon: Icons.speed,
-                                    height: orientation == Orientation.portrait
-                                        ? MediaQuery.of(context).size.height *
-                                            0.090
-                                        : MediaQuery.of(context).size.height *
-                                            0.90,
-                                    width: orientation == Orientation.portrait
-                                        ? MediaQuery.of(context).size.height *
-                                            0.090
-                                        : MediaQuery.of(context).size.height *
-                                            0.90,
-                                    size: 45,
-                                    iconColor: Colors.green,
-                                  );
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: MediaQuery.sizeOf(context).height * 0.010,
-                                top: MediaQuery.sizeOf(context).height * 0.005,
-                              ),
-                              child: const TextWidget(
-                                  text1: "Speed",
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 109, 109, 109),
-                                  fontSize: 12),
-                            )
-                          ],
+                    Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: MediaQuery.sizeOf(context).height * 0.018,
-                            top: MediaQuery.sizeOf(context).height * 0.015,
-                          ),
-                          child: Consumer<AltitudeTracker>(
-                            builder: (context, altitudeTracker, child) {
-                              return ReuseContainer(
-                                color: altitudeTracker.color,
-                                speed:
-                                    '${altitudeTracker.altitude.toStringAsFixed(2)} m',
-                                icon: Icons.terrain,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.090,
-                                width:
-                                    MediaQuery.of(context).size.height * 0.090,
-                                size: 45,
-                                iconColor:
-                                    const Color.fromARGB(255, 255, 230, 0),
-                              );
-                            },
-                          ),
+                        child: Consumer<SpeedTrackerNotifier>(
+                          builder: (context, speedTracker, child) {
+                            return ReuseContainer(
+                              color: Colors.white,
+                              icon: Icons.speed,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.060,
+                              width: MediaQuery.of(context).size.height * 0.060,
+                              size: MediaQuery.of(context).size.height * 0.030,
+                              iconColor: Colors.green,
+                              value:
+                                  '${speedTracker.speed.toStringAsFixed(2)} m/s',
+                              title: 'speed',
+                            );
+                          },
+                        )),
+                    Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: MediaQuery.sizeOf(context).height * 0.010,
-                            top: MediaQuery.sizeOf(context).height * 0.005,
-                          ),
-                          child: const TextWidget(
-                              text1: "Altitude",
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 109, 109, 109),
-                              fontSize: 12),
-                        )
-                      ],
-                    ),
+                        child: Consumer<AltitudeTracker>(
+                          builder: (context, altitudeTracker, child) {
+                            return ReuseContainer(
+                              color: Colors.white,
+                              icon: Icons.height,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.060,
+                              width: MediaQuery.of(context).size.height * 0.060,
+                              size: MediaQuery.of(context).size.height * 0.030,
+                              iconColor: const Color.fromARGB(255, 58, 58, 58),
+                              value:
+                                  '${altitudeTracker.altitude.toStringAsFixed(2)} m',
+                              title: 'altitude',
+                            );
+                          },
+                        )),
+                    Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
+                        ),
+                        child: ReuseContainer(
+                          color: Colors.white,
+                          icon: Icons.local_police,
+                          height: MediaQuery.of(context).size.height * 0.060,
+                          width: MediaQuery.of(context).size.height * 0.060,
+                          size: MediaQuery.of(context).size.height * 0.030,
+                          iconColor: const Color.fromARGB(255, 255, 230, 0),
+                          value: '100',
+                          title: 'police',
+                        )),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.sizeOf(context).height * 0.005),
-                      child: const TextWidget(
-                          text1: "Location",
-                          fontWeight: FontWeight.bold,
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
+                        ),
+                        child: ReuseContainer(
                           color: Colors.white,
-                          fontSize: 22),
-                    ),
+                          icon: Icons.local_hospital,
+                          height: MediaQuery.of(context).size.height * 0.060,
+                          width: MediaQuery.of(context).size.height * 0.060,
+                          size: MediaQuery.of(context).size.height * 0.030,
+                          iconColor: const Color.fromARGB(255, 4, 0, 255),
+                          value: '102',
+                          title: 'ambulance',
+                        )),
                     Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.sizeOf(context).height * 0.005),
-                      child: const LiveLocationTracker(),
-                    ),
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
+                        ),
+                        child: ReuseContainer(
+                          color: Colors.white,
+                          icon: Icons.fire_truck,
+                          height: MediaQuery.of(context).size.height * 0.060,
+                          width: MediaQuery.of(context).size.height * 0.060,
+                          size: MediaQuery.of(context).size.height * 0.030,
+                          iconColor: const Color.fromARGB(255, 255, 166, 0),
+                          value: '101',
+                          title: 'fire-brigade',
+                        )),
+                    Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.sizeOf(context).height * 0.018,
+                          top: MediaQuery.sizeOf(context).height * 0.015,
+                        ),
+                        child: ReuseContainer(
+                          color: Colors.white,
+                          icon: Icons.call_rounded,
+                          height: MediaQuery.of(context).size.height * 0.060,
+                          width: MediaQuery.of(context).size.height * 0.060,
+                          size: MediaQuery.of(context).size.height * 0.030,
+                          iconColor: const Color.fromARGB(255, 255, 0, 0),
+                          value: '192',
+                          title: 'helpline',
+                        )),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.sizeOf(context).height * 0.005),
-                      child: const TextWidget(
-                          text1: "HelpLine",
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 22),
-                    ),
-                    const AutoCarouselIcon(),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.sizeOf(context).height * 0.005),
-                      child: const TextWidget(
-                          text1: "Status",
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 22),
-                    ),
-                    const WideContainer(),
-                  ],
-                )
               ],
             ),
-          );
-        }),
-      ),
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: const WideContainer(),
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: Text(
+                'God\'s Message For you',
+                style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).height * 0.022,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).height * 0.008),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: MediaQuery.sizeOf(context).height * 0.03,
+                    backgroundImage: const NetworkImage(
+                      'https://img.freepik.com/free-vector/black-background-with-glowing-light-effect_1017-30649.jpg',
+                    ),
+                  ),
+                  SizedBox(width: MediaQuery.sizeOf(context).height * 0.008),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'god_you_belive_in',
+                        style: TextStyle(
+                          fontSize: MediaQuery.sizeOf(context).height * 0.018,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'infinity years ago',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: MediaQuery.sizeOf(context).height * 0.014,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const AutoCarouselIcon(),
+          ],
+        ),
+      )),
     );
   }
 }

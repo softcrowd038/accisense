@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class CustomUserPersonalDetails extends StatefulWidget {
   const CustomUserPersonalDetails({Key? key}) : super(key: key);
@@ -43,9 +42,10 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final uri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunch(uri.toString())) {
-      await launch(uri.toString());
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Could not launch phone dialer.'),

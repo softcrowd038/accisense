@@ -9,56 +9,52 @@ class WideContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: (context, orientation) {
-      return Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.005,
-          horizontal: MediaQuery.of(context).size.width * 0.01,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: MediaQuery.of(context).size.height * 0.005,
+        horizontal: MediaQuery.of(context).size.width * 0.01,
+      ),
+      child: Container(
+        height: MediaQuery.sizeOf(context).height * 0.055,
+        width: MediaQuery.sizeOf(context).width,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(5),
         ),
-        child: Container(
-          height: orientation == Orientation.portrait
-              ? MediaQuery.sizeOf(context).height * 0.055
-              : MediaQuery.sizeOf(context).height * 0.2,
-          width: MediaQuery.sizeOf(context).width,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.01,
-                  left: MediaQuery.of(context).size.width * 0.01,
-                ),
-                child: Consumer<AccidentDetectionProvider>(
-                  builder: (context, detected, _) {
-                    return ImageWidget(
-                      icon: detected.isAccidentDetected
-                          ? "assets/images/warning.png"
-                          : "assets/images/insurance.png",
-                      height: MediaQuery.of(context).size.height * 0.0915,
-                      width: MediaQuery.of(context).size.width * 0.0915,
-                    );
-                  },
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.01,
+                left: MediaQuery.of(context).size.width * 0.01,
               ),
-              Consumer<AccidentDetectionProvider>(
-                builder: (context, detected, _) => TextWidget(
-                  text1: detected.isAccidentDetected
-                      ? "Accident is detected!"
-                      : "Everything is Fine!",
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Consumer<AccidentDetectionProvider>(
+                builder: (context, detected, _) {
+                  return ImageWidget(
+                    icon: detected.isAccidentDetected
+                        ? "assets/images/warning.png"
+                        : "assets/images/insurance.png",
+                    height: MediaQuery.of(context).size.height * 0.0915,
+                    width: MediaQuery.of(context).size.width * 0.0915,
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+            Consumer<AccidentDetectionProvider>(
+              builder: (context, detected, _) => TextWidget(
+                text1: detected.isAccidentDetected
+                    ? "Accident is detected!"
+                    : "Everything is Fine!",
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:accident/Presentation/Accident_Detection/services/accident_firebase_details.dart';
-import 'package:accident/Presentation/dashboard/components/seconadary_components/icon_widget.dart';
 
 class AccidentListWidget extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -25,7 +24,7 @@ class AccidentListWidget extends StatelessWidget {
         return GestureDetector(
           onTap: () => {},
           child: Container(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height * 0.6,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(color: Colors.white),
             child: ListView.builder(
@@ -122,8 +121,8 @@ class AccidentListWidget extends StatelessWidget {
                                                     .size
                                                     .height *
                                                 0.016,
-                                            color:
-                                                Color.fromARGB(255, 94, 94, 94),
+                                            color: const Color.fromARGB(
+                                                255, 94, 94, 94),
                                           ),
                                         ),
                                       ),

@@ -1,4 +1,6 @@
 // main.dart
+// ignore_for_file: avoid_print
+
 import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
 import 'package:accident/Presentation/Profile/Model/health_details_page.dart';
 import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:accident/Presentation/dashboard/components/container_reuse.dart';
+import 'package:accident/Presentation/dashboard/components/moto_image_container.dart';
 import 'package:flutter/material.dart';
 
 class AutoCarouselIcon extends StatefulWidget {
@@ -30,8 +30,8 @@ class _AutoCarouselIconState extends State<AutoCarouselIcon> {
   }
 
   void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (_currentIndex < 3) {
+    _timer = Timer.periodic(const Duration(seconds: 6), (Timer timer) {
+      if (_currentIndex < 6) {
         _currentIndex++;
       } else {
         _currentIndex = 0;
@@ -56,58 +56,58 @@ class _AutoCarouselIconState extends State<AutoCarouselIcon> {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(
-                left: MediaQuery.sizeOf(context).height * 0.010,
-                top: MediaQuery.sizeOf(context).height * 0.015),
-            child: ReuseContainer(
-                color: Colors.white,
-                speed: "Police",
-                icon: Icons.local_police,
-                height: MediaQuery.sizeOf(context).height * 0.150,
-                width: MediaQuery.sizeOf(context).height * 0.150,
-                size: 55,
-                iconColor: Colors.blue),
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).height * 0.01,
+            ),
+            child: const MotoImageContainer(
+              imageUrl:
+                  'https://img.freepik.com/free-vector/motorcycle-cartoon-poster-with-biker-sport-clothing-riding-bike-vector-illustration_1284-79643.jpg?t=st=1737436743~exp=1737440343~hmac=03bbe7e665a6e4bff4697088f4a45fb244ad3592d81f3ea6c64406905125d542&w=996',
+              message:
+                  'Your helmet is your shield—don’t ride without it, \neven for a mile.',
+            ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-                left: MediaQuery.sizeOf(context).height * 0.010,
-                top: MediaQuery.sizeOf(context).height * 0.015),
-            child: ReuseContainer(
-                color: Colors.white,
-                speed: "Hospital",
-                icon: Icons.local_hospital,
-                height: MediaQuery.sizeOf(context).height * 0.150,
-                width: MediaQuery.sizeOf(context).height * 0.150,
-                size: 55,
-                iconColor: Colors.red),
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).height * 0.010,
+            ),
+            child: const MotoImageContainer(
+              imageUrl:
+                  'https://img.freepik.com/free-vector/car-driving-concept-illustration_114360-7981.jpg',
+              message: 'Buckle up every time; it only takes a second.',
+            ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-                left: MediaQuery.sizeOf(context).height * 0.010,
-                top: MediaQuery.sizeOf(context).height * 0.015),
-            child: ReuseContainer(
-                color: Colors.white,
-                speed: "fire brigade",
-                icon: Icons.fire_extinguisher,
-                height: MediaQuery.sizeOf(context).height * 0.150,
-                width: MediaQuery.sizeOf(context).height * 0.150,
-                size: 55,
-                iconColor: const Color.fromARGB(255, 255, 230, 1)),
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).height * 0.010,
+            ),
+            child: const MotoImageContainer(
+              imageUrl:
+                  'https://img.freepik.com/free-vector/fast-car-concept-illustration_114360-2495.jpg',
+              message: 'Speed thrills but kills.Slow down to live longer.',
+            ),
           ),
           Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.sizeOf(context).height * 0.010,
-                  right: MediaQuery.sizeOf(context).height * 0.010,
-                  top: MediaQuery.sizeOf(context).height * 0.015),
-              child: ReuseContainer(
-                color: Colors.white,
-                speed: "Help Line",
-                icon: Icons.help_center_rounded,
-                height: MediaQuery.sizeOf(context).height * 0.150,
-                width: MediaQuery.sizeOf(context).height * 0.150,
-                size: 55,
-                iconColor: Colors.orange,
-              )),
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).height * 0.010,
+            ),
+            child: const MotoImageContainer(
+              imageUrl:
+                  'https://img.freepik.com/free-vector/drunk-driving-concept-illustration_114360-14318.jpg',
+              message:
+                  'Drink and drive, and you might not arrive. \nChoose safety, not regret.',
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(
+              MediaQuery.sizeOf(context).height * 0.010,
+            ),
+            child: const MotoImageContainer(
+              imageUrl:
+                  'https://cdn.vectorstock.com/i/500p/02/15/young-woman-using-mobile-phone-while-drive-vector-28980215.jpg',
+              message:
+                  'Eyes on the road, not on your phone. Texts can wait; \nlife cannot.',
+            ),
+          ),
         ],
       ),
     );
