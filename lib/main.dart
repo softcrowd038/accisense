@@ -4,6 +4,8 @@
 import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
 import 'package:accident/Presentation/Profile/Model/health_details_page.dart';
 import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
+import 'package:accident/Presentation/Profile/Model/user_accident_details.dart';
+import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/dashboard/Utils/accelerometer_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/altitude_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/gyroscope_provider.dart';
@@ -11,6 +13,7 @@ import 'package:accident/Presentation/dashboard/Utils/location_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/navigation_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/speed_provider.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/app/my_app.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -46,14 +49,6 @@ Future<void> requestPermissions() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyA9R9GzGQrM5tpo20TUFTpdjjvH7_CaT3U",
-      appId: "1:1019378541718:android:cbb6c9654e2fc6c7b30eb7",
-      messagingSenderId: "1019378541718",
-      projectId: "accident-df789",
-    ),
-  );
 
   await requestPermissions();
 
@@ -95,10 +90,19 @@ class MyAppProviders extends StatelessWidget {
         ChangeNotifierProvider<ProfilePageModel>(
           create: (_) => ProfilePageModel(),
         ),
+        ChangeNotifierProvider<UserProfileDetails>(
+          create: (_) => UserProfileDetails(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (_) => User(),
+        ),
         ChangeNotifierProvider<LocationProvider>(
             create: (_) => LocationProvider()),
         ChangeNotifierProvider<UserCredentials>(
           create: (_) => UserCredentials(),
+        ),
+        ChangeNotifierProvider<UserAccidentHistory>(
+          create: (_) => UserAccidentHistory(),
         ),
         ChangeNotifierProvider<HealthDetailsModel>(
             create: (_) => HealthDetailsModel()),

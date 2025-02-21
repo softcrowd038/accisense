@@ -127,18 +127,19 @@ class _ContactListScreenState extends State<ContactListScreen> {
                   subtitle: Text(contact.phones?.isNotEmpty ?? false
                       ? contact.phones!.first.value!
                       : 'No phone number'),
-                  leading:
-                      (contact.avatar != null && contact.avatar!.isNotEmpty)
-                          ? CircleAvatar(
-                              backgroundImage: MemoryImage(contact.avatar!),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                contact.initials(),
-                                style: const TextStyle(color: Colors.white),
-                              ),
+                  leading: Column(children: [
+                    (contact.avatar != null && contact.avatar!.isNotEmpty)
+                        ? CircleAvatar(
+                            backgroundImage: MemoryImage(contact.avatar!),
+                          )
+                        : CircleAvatar(
+                            backgroundColor: Colors.blue,
+                            child: Text(
+                              contact.initials(),
+                              style: const TextStyle(color: Colors.white),
                             ),
+                          ),
+                  ]),
                   trailing: isSelected
                       ? const Icon(Icons.check_box)
                       : const Icon(Icons.check_box_outline_blank),

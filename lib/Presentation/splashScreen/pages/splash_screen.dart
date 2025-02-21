@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:accident/Presentation/Navigation/page_navigation.dart';
+import 'package:accident/Presentation/login_and_registration/pages/login_registration.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,10 +21,21 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+        _navigateAfterSplash();
       }
     });
+  }
+
+  Future<void> _navigateAfterSplash() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final authToken = sharedPreferences.getString('auth_token');
+    if (authToken != null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    }
   }
 
   @override

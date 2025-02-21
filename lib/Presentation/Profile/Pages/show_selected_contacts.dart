@@ -1,11 +1,9 @@
-// ignore_for_file: unnecessary_null_comparison, avoid_print
-
 import 'package:accident/Presentation/Navigation/page_navigation.dart';
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
 import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
+import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:flutter/material.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:provider/provider.dart';
 
 class SelectedContactsScreen extends StatefulWidget {
@@ -18,6 +16,25 @@ class SelectedContactsScreen extends StatefulWidget {
 }
 
 class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
+  late List<TextEditingController> relationControllers;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize a TextEditingController for each contact
+    relationControllers = List.generate(
+        widget.selectedContacts.length, (index) => TextEditingController());
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to free memory
+    for (var controller in relationControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,54 +52,76 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
               itemCount: widget.selectedContacts.length,
               itemBuilder: (context, index) {
                 Contact contact = widget.selectedContacts[index];
-                return ListTile(
-                  title: Text(contact.displayName ?? 'No name'),
-                  subtitle: Text(contact.phones?.isNotEmpty ?? false
-                      ? contact.phones!.first.value!
-                      : 'No phone number'),
-                  leading:
-                      (contact.avatar != null && contact.avatar!.isNotEmpty)
-                          ? CircleAvatar(
-                              backgroundImage: MemoryImage(contact.avatar!),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                contact.initials(),
-                                style: const TextStyle(color: Colors.white),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  child: ListTile(
+                    leading:
+                        (contact.avatar != null && contact.avatar!.isNotEmpty)
+                            ? CircleAvatar(
+                                backgroundImage: MemoryImage(contact.avatar!),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                child: Text(
+                                  contact.initials(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
-                            ),
+                    title: Text(
+                      contact.displayName ?? 'No name',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(contact.phones?.isNotEmpty ?? false
+                            ? contact.phones!.first.value!
+                            : 'No phone number'),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: relationControllers[index],
+                          decoration: InputDecoration(
+                            labelText: 'Relation',
+                            hintText:
+                                'Enter relation for ${contact.displayName}',
+                            border: const OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            String contactPhone = widget.selectedContacts[index]
+                                        .phones?.isNotEmpty ==
+                                    true
+                                ? widget.selectedContacts[index].phones!.first
+                                        .value ??
+                                    ''
+                                : '';
+                            String contactName =
+                                widget.selectedContacts[index].displayName ??
+                                    '';
+                            final contactDetails =
+                                Provider.of<User>(context, listen: false);
+                            contactDetails.setemergencyContacts([
+                              EmergencyContact(
+                                  name: contactName,
+                                  relation: value,
+                                  mobile: contactPhone)
+                            ]);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          widget.selectedContacts != null && widget.selectedContacts.isNotEmpty
+          widget.selectedContacts.isNotEmpty
               ? GestureDetector(
                   onTap: () {
-                    String contact1Phone =
-                        widget.selectedContacts[0].phones?.isNotEmpty == true
-                            ? widget.selectedContacts[0].phones!.first.value ??
-                                ''
-                            : '';
-                    final profilePageProvider =
-                        Provider.of<ProfilePageModel>(context, listen: false);
-                    FireStoreProfileData().storeUserData(
-                      profilePageProvider.imageurl,
-                      profilePageProvider.name,
-                      profilePageProvider.email,
-                      profilePageProvider.phone,
-                      widget.selectedContacts[0].displayName ?? '',
-                      'friend',
-                      contact1Phone,
-                      profilePageProvider.address,
-                      profilePageProvider.birthdate,
-                      profilePageProvider.gender,
-                    );
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const HomePage())));
+                 
+                    UserRegistrationLogin userRegistrationLogin =
+                        UserRegistrationLogin();
+                    userRegistrationLogin.registerUser(context);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 50.0),

@@ -63,6 +63,7 @@ dependencies:
   contacts_service:
   intl:
   url_launcher:
+  percent_indicator: ^4.2.4
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons:
+
+
+flutter_launcher_icons:
+android: "launcher_icon"
+ios: true
+image_path: "assets/images/logo.jpeg"
+android_icons:
+background: "#000000"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

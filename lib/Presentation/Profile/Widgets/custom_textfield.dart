@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       keyboardType: keyboardType,
       style: TextStyle(
-          color: Colors.grey,
+          color: Colors.black,
           fontSize: MediaQuery.of(context).size.height * 0.018),
       decoration: InputDecoration(
         fillColor: Colors.transparent,

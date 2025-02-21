@@ -1,3 +1,4 @@
+import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
 import 'package:accident/Presentation/Profile/Pages/gender_page.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_textfield.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
@@ -5,43 +6,37 @@ import 'package:accident/Presentation/login_and_registration/Widgets/custom_butt
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PersonalInfoPage extends StatefulWidget {
-  const PersonalInfoPage({super.key});
+class MedicalHistoryPage extends StatefulWidget {
+  const MedicalHistoryPage({super.key});
 
   @override
-  State<PersonalInfoPage> createState() => _PersonalInfoPageState();
+  State<MedicalHistoryPage> createState() => _MedicalHistoryPageState();
 }
 
-class _PersonalInfoPageState extends State<PersonalInfoPage> {
+class _MedicalHistoryPageState extends State<MedicalHistoryPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
+  TextEditingController _allergiesController = TextEditingController();
+  TextEditingController _medicalHistory = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    _phoneController = TextEditingController();
-    _addressController = TextEditingController();
+
+    _allergiesController = TextEditingController();
+    _medicalHistory = TextEditingController();
   }
 
-  void _updateEmail(String value) {
-    Provider.of<User>(context, listen: false).setEmail(value);
+  void _updateAllergies(List<String> value) {
+    Provider.of<User>(context, listen: false).setAllergies(value);
   }
 
-  void _updatePhone(String value) {
-    Provider.of<User>(context, listen: false).setMobileNumber(value);
-  }
-
-  void _updateAdress(String value) {
-    Provider.of<User>(context, listen: false).setAddress(value);
+  void _updateMedicalHistory(List<String> value) {
+    Provider.of<User>(context, listen: false).setMedicalHistory(value);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -63,7 +58,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               size: MediaQuery.of(context).size.height * 0.018,
             ),
             Text(
-              'step 2',
+              'step 5',
               style: TextStyle(
                   fontSize: MediaQuery.of(context).size.height * 0.018,
                   fontWeight: FontWeight.w100),
@@ -81,64 +76,41 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 Form(
                   key: _formKey,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Image(
                           image: NetworkImage(
-                              'https://cdni.iconscout.com/illustration/premium/thumb/user-profile-illustration-download-in-svg-png-gif-file-formats--id-login-register-technology-pack-network-communication-illustrations-2928727.png?f=webp')),
+                              'https://img.freepik.com/free-vector/doctors-analyzing-patients-disease-history_74855-16116.jpg')),
                       Text(
-                        'enter your profile details',
+                        'enter your Medical History',
                         style: TextStyle(
                             color: const Color(0xff020053),
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.018,
                             fontWeight: FontWeight.w300),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: CustomTextField(
-                      //     onChanged: (value) {
-                      //       _updateEmail(value);
-                      //     },
-                      //     obscureText: false,
-                      //     hint: "xyz123@pqr.abc",
-                      //     label: "email",
-                      //     controller: _emailController,
-                      //     validator: (value) {
-                      //       if (value == null || value.isEmpty) {
-                      //         return "Enter your Email first!";
-                      //       }
-                      //       return null;
-                      //     },
-                      //     keyboardType: TextInputType.emailAddress,
-                      //     color: Colors.black,
-                      //     suffixIcon: Icon(
-                      //       Icons.email,
-                      //       color: Colors.black,
-                      //       size: MediaQuery.of(context).size.height * 0.025,
-                      //     ),
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomTextField(
                           onChanged: (value) {
-                            _updateAdress(value);
+                            _updateMedicalHistory(
+                                value.split(',').map((e) => e.trim()).toList());
                           },
                           obscureText: false,
-                          hint:
-                              "John Doe123, Main Street,Gandhi Nagar,Bangalore,Karnataka - 560001,India",
-                          label: "address",
-                          controller: _addressController,
+                          hint: "e.g. \"penicillin\", \"dust\"",
+                          label: "allergies",
+                          controller: _allergiesController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Enter your Emergency Phone first!";
+                              return "Enter your allergies first!";
                             }
                             return null;
                           },
                           keyboardType: TextInputType.text,
                           color: Colors.black,
                           suffixIcon: Icon(
-                            Icons.home,
+                            Icons.vaccines,
                             color: Colors.black,
                             size: MediaQuery.of(context).size.height * 0.025,
                           ),
@@ -148,22 +120,23 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: CustomTextField(
                           onChanged: (value) {
-                            _updatePhone(value);
+                            _updateAllergies(
+                                value.split(',').map((e) => e.trim()).toList());
                           },
                           obscureText: false,
-                          hint: "+91 1234567890",
-                          label: "phone",
-                          controller: _phoneController,
+                          hint: "e.g. Asthama",
+                          label: "Medical History",
+                          controller: _medicalHistory,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Enter your Phone first!";
+                              return "Enter your Details first!";
                             }
                             return null;
                           },
-                          keyboardType: TextInputType.phone,
+                          keyboardType: TextInputType.text,
                           color: Colors.black,
                           suffixIcon: Icon(
-                            Icons.phone,
+                            Icons.medical_information,
                             color: Colors.black,
                             size: MediaQuery.of(context).size.height * 0.025,
                           ),
@@ -181,7 +154,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => const GenderPage())));
+                              builder: ((context) =>
+                                  const ContactListScreen())));
                     }
                   },
                   child: Padding(

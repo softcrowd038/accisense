@@ -1,4 +1,6 @@
+import 'package:accident/Presentation/Profile/Pages/profile_details.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/Presentation/login_and_registration/Services/signup_signin.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/common_textform_field.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
@@ -42,15 +44,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _updateUsername(String value) {
-    Provider.of<UserCredentials>(context, listen: false).setUsername(value);
+    Provider.of<User>(context, listen: false).setUsername(value);
   }
 
   void _updateEmail(String value) {
-    Provider.of<UserCredentials>(context, listen: false).setEmail(value);
+    Provider.of<User>(context, listen: false).setEmail(value);
   }
 
   void _updatePassword(String value) {
-    Provider.of<UserCredentials>(context, listen: false).setPassword(value);
+    Provider.of<User>(context, listen: false).setPassword(value);
+  }
+
+  void _updateReEnteredPassword(String value) {
+    Provider.of<User>(context, listen: false).setPasswordConfirmation(value);
   }
 
   @override
@@ -215,13 +221,53 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   },
                                 ),
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  right: MediaQuery.of(context).size.height *
+                                      0.008,
+                                  bottom: MediaQuery.of(context).size.height *
+                                      0.010,
+                                ),
+                                child: CommonTextFormfield(
+                                  onChanged: (value) {
+                                    _updateReEnteredPassword(value);
+                                  },
+                                  label: "Re-Enter Password",
+                                  hint: "MNop1234@#",
+                                  obscure: true,
+                                  controller: _reEnterPasswordController,
+                                  suffixIcon: const Icon(
+                                    Icons.key,
+                                    color: Colors.white,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter the Password first!";
+                                    }
+                                    if (value.length < 8) {
+                                      return "Password is too short, Enter up to 8 digits!";
+                                    }
+                                    if (!regexpa.hasMatch(value)) {
+                                      return "Use Alphabets(capital and small), symbols and numbers only in the password";
+                                    }
+                                    if (_passwordController.text != value) {
+                                      return 'Password do not match';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
-                                    UiHelper uiHelper = UiHelper(context);
-                                    uiHelper.signUp(_emailController.text,
-                                        _passwordController.text);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ProfileDetails()));
                                   }
                                 },
                                 child: Padding(

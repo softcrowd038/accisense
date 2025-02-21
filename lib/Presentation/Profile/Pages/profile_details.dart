@@ -1,8 +1,9 @@
 // ignore_for_file: unused_element
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
+
 import 'package:accident/Presentation/Profile/Pages/personal_info_page.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_textfield.dart';
 import 'package:accident/Presentation/Profile/Widgets/profile_picture.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +28,12 @@ class _ProfileDetailsState extends State<ProfileDetails> {
   }
 
   void _updateName(String value) {
-    Provider.of<ProfilePageModel>(context, listen: false).setName(value);
+    Provider.of<User>(context, listen: false).setName(value);
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<User>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(

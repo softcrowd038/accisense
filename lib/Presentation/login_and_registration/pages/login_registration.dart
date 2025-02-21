@@ -1,5 +1,6 @@
 import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
 import 'package:accident/Presentation/login_and_registration/Services/signup_signin.dart';
+import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/common_textform_field.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:accident/Presentation/login_and_registration/pages/forget_password.dart';
@@ -190,8 +191,11 @@ class _LoginPageState extends State<LoginPage> {
                         GestureDetector(
                           onTap: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              UiHelper uiHelper = UiHelper(context);
-                              uiHelper.signIn(_emailController.text,
+                              UserRegistrationLogin userRegistrationLogin =
+                                  UserRegistrationLogin();
+                              userRegistrationLogin.loginUser(
+                                  context,
+                                  _emailController.text,
                                   _passwordController.text);
                             }
                           },

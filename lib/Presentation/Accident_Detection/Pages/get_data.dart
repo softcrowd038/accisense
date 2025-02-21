@@ -1,63 +1,95 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:accident/Presentation/Accident_Detection/services/accident_firebase_details.dart';
+// ignore_for_file: avoid_print
 
-class AccidentListWidget extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const AccidentListWidget({Key? key});
+import 'package:flutter/material.dart';
+import 'package:accident/Presentation/Profile/Model/user_accident_details.dart';
+import 'package:accident/Presentation/Profile/Services/user_accident_history_service.dart';
+import 'package:intl/intl.dart';
+
+class AccidentListWidget extends StatefulWidget {
+  const AccidentListWidget({Key? key}) : super(key: key);
+
+  @override
+  State<AccidentListWidget> createState() => _AccidentListWidgetState();
+}
+
+class _AccidentListWidgetState extends State<AccidentListWidget> {
+  List<UserAccidentHistory?> _accidents = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      UserAccidentHistoryService userData = UserAccidentHistoryService();
+      final List<UserAccidentHistory?> userProfileDetails =
+          await userData.getUserAccidentHistory();
+      setState(() {
+        _accidents = userProfileDetails;
+      });
+    } catch (e) {
+      print('Error fetching accident data: $e');
+    }
+  }
+
+  String formatDateToYYYYMMDD(DateTime date) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(date);
+  }
+
+  Color statusColor(String value) {
+    if (value == 'reported') {
+      return Colors.red;
+    } else if (value == 'in_progress') {
+      return Colors.yellow;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('accidents').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.50,
+        width: MediaQuery.of(context).size.width,
+        child: _accidents.isNotEmpty
+            ? ListView.builder(
+                itemCount: _accidents.length,
+                itemBuilder: (context, index) {
+                  final accident = _accidents[index];
 
-        List<Accident> accidents = snapshot.data!.docs
-            .map((doc) => Accident.fromFirestore(doc))
-            .toList();
-
-        return GestureDetector(
-          onTap: () => {},
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(color: Colors.white),
-            child: ListView.builder(
-              itemCount: accidents.length,
-              itemBuilder: (context, index) {
-                Accident accident = accidents[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                         boxShadow: const [
                           BoxShadow(
-                              offset: Offset(0, 1),
-                              spreadRadius: 2,
-                              blurRadius: 4,
-                              color: Color.fromARGB(255, 219, 219, 219))
-                        ]),
-                    child: Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.height * 0.012),
+                            offset: Offset(0, 1),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            color: Color.fromARGB(255, 219, 219, 219),
+                          )
+                        ],
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
+                              const Icon(
+                                Icons.place,
+                                color: Colors.red,
+                              ),
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Text(
-                                    accident.location,
+                                    accident!.address ?? "Unknown Location",
                                     style: TextStyle(
                                       fontSize:
                                           MediaQuery.of(context).size.height *
@@ -71,24 +103,27 @@ class AccidentListWidget extends StatelessWidget {
                             ],
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.014,
-                          ),
+                              height:
+                                  MediaQuery.of(context).size.height * 0.014),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Icon(
-                                    Icons.date_range,
+                                    Icons.circle,
                                     size: MediaQuery.of(context).size.height *
-                                        0.025,
+                                        0.01,
                                     color: Colors.blue,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      accident.date,
+                                      formatDateToYYYYMMDD(accident.createdAt!)
+                                          .toString(),
                                       style: TextStyle(
                                         fontSize:
                                             MediaQuery.of(context).size.height *
@@ -98,96 +133,47 @@ class AccidentListWidget extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.height *
-                                        0.014,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.av_timer,
-                                        size:
-                                            MediaQuery.of(context).size.height *
-                                                0.025,
-                                        color: Colors.green,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          accident.time,
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.016,
-                                            color: const Color.fromARGB(
-                                                255, 94, 94, 94),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  _showDeleteConfirmationDialog(
-                                      context, accident);
-                                },
-                                child: Icon(
-                                  Icons.delete,
-                                  size: MediaQuery.of(context).size.height *
-                                      0.025,
-                                  color: Colors.red,
-                                ),
-                              )
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: MediaQuery.of(context).size.height *
+                                        0.01,
+                                    color: statusColor(accident.status!),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      accident.status ?? '',
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.016,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context, Accident accident) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this accident?"),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Close the dialog
-              },
-            ),
-            TextButton(
-              child: const Text("Delete"),
-              onPressed: () async {
-                try {
-                  await Accident.deleteAccident(accident.id);
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(dialogContext).pop(); // Close the dialog
-                } catch (e) {
-                  // Handle error if needed
-                  // ignore: avoid_print
-                  print('Error deleting accident: $e');
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+                  );
+                },
+              )
+            : const Center(
+                child: Text(
+                  'No data Found',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ));
   }
 }

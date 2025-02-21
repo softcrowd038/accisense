@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
+import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
+import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
+import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
+import 'package:accident/data/common_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +21,9 @@ class ProfilePictureField extends StatefulWidget {
 }
 
 class ProfilePictureFieldState extends State<ProfilePictureField> {
+  UserProfileDetails? _userData;
+  File? _selectedImage;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -29,54 +34,75 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      UserProfileService userData = UserProfileService();
+      final userProfileDetails = await userData.getUserProfile();
+      if (userProfileDetails != null) {
+        setState(() {
+          _userData = userProfileDetails;
+        });
+      }
+    } catch (e) {
+      _showSnackbar('Error fetching user data: $e');
+    }
+  }
+
   Future<void> _getImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      if (!mounted) return;
-      Provider.of<ProfilePageModel>(context, listen: false)
-          .setImageUrl(File(pickedImage.path));
-    } else {
-      if (!mounted) return;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('No image selected')));
-      });
+    print('entered get image');
+    try {
+      final picker = ImagePicker();
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        if (!mounted) return;
+        setState(() {
+          print('entered setstate');
+          _selectedImage = File(pickedImage.path);
+        });
+        Provider.of<User>(context, listen: false).setImage(_selectedImage!);
+        print(_selectedImage);
+      } else {
+        _showSnackbar('No image selected');
+      }
+    } catch (e) {
+      _showSnackbar('Error selecting image: $e');
     }
   }
 
   Future<void> _retainImage() async {
+    if (_userData == null || _userData!.image == null || widget.isEdit) return;
     try {
-      String? userEmail =
-          Provider.of<ProfilePageModel>(context, listen: false).email;
-
-      String? imageUrl =
-          await FireStoreProfileData().getImageUrlFromFirestore(userEmail!);
-
-      if (await File(imageUrl!).exists()) {
+      String? imageUrl = _userData?.image;
+      if (imageUrl != null && imageUrl.isNotEmpty) {
         if (!mounted) return;
-        Provider.of<ProfilePageModel>(context, listen: false)
-            .setImageUrl(File(imageUrl));
-        return;
+        setState(() {
+          _selectedImage = File(imageUrl);
+        });
+        print(_selectedImage);
+        Provider.of<User>(context, listen: false).setImage(_selectedImage!);
+      } else {
+        _showSnackbar('Image not found in Firestore');
       }
-      if (!mounted) return;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Image not found in Firestore')));
-      });
     } catch (e) {
-      print('Error retrieving image from Firestore: $e');
-      if (!mounted) return;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to retrieve image')));
-      });
+      _showSnackbar('Failed to retrieve image');
     }
+  }
+
+  void _showSnackbar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
-    final profileModel = Provider.of<ProfilePageModel>(context);
+    final user = Provider.of<User>(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -84,22 +110,28 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
           height: MediaQuery.of(context).size.height * 0.12,
           width: MediaQuery.of(context).size.height * 0.12,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.height * 0.06),
-              boxShadow: const [
-                BoxShadow(
-                    offset: Offset(0, 1),
-                    spreadRadius: 2,
-                    blurRadius: 9,
-                    color: Color.fromARGB(255, 214, 214, 214))
-              ]),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.height * 0.06,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                offset: Offset(0, 1),
+                spreadRadius: 2,
+                blurRadius: 9,
+                color: Color.fromARGB(255, 214, 214, 214),
+              )
+            ],
+          ),
           child: CircleAvatar(
             radius: MediaQuery.of(context).size.height * 0.06,
             backgroundColor: Colors.white,
-            backgroundImage: profileModel.imageurl != null
-                ? FileImage(File(profileModel.imageurl!))
-                : null,
-            child: profileModel.imageurl == null
+            backgroundImage: _selectedImage != null
+                ? FileImage(_selectedImage!)
+                : (_userData?.image != null
+                    ? NetworkImage('$imageBaseUrl/${_userData!.image}')
+                        as ImageProvider
+                    : null),
+            child: (_selectedImage == null && _userData?.image == null)
                 ? Icon(
                     Icons.person,
                     size: MediaQuery.of(context).size.height * 0.06,

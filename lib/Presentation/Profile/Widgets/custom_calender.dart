@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class CustomCalendarState extends State<CustomCalendar> {
 
   Future<void> _selectDate(BuildContext context) async {
     print(ProfilePageModel());
+    final date2 = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: widget.initialDate,
@@ -33,8 +35,12 @@ class CustomCalendarState extends State<CustomCalendar> {
       setState(() {
         selectedDate = picked;
       });
-      Provider.of<ProfilePageModel>(context, listen: false).birthdate =
-          picked; // Set selectedDate using Provider
+      final difference = date2.difference(selectedDate).inDays;
+      print(difference);
+      final years = difference / 365;
+      print(years.round());
+      final birthDayProvider = Provider.of<User>(context, listen: false);
+      birthDayProvider.setAge(years.round());
     }
   }
 
@@ -44,15 +50,14 @@ class CustomCalendarState extends State<CustomCalendar> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextFormField(
-          readOnly: true, // Make the text field read-only
-          onTap: () => _selectDate(
-              context), // Call _selectDate when the text field is tapped
+          readOnly: true,
+          onTap: () => _selectDate(context),
           controller: TextEditingController(
             text:
                 '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
-          ), // Display the selected date in the text field
-          style:
-              const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.w600),
+          ),
+          style: const TextStyle(
+              color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.w600),
           decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),

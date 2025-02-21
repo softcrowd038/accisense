@@ -1,7 +1,9 @@
+import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
 import 'package:accident/Presentation/GoogleMapIntegration/live_location.dart';
 import 'package:accident/Presentation/dashboard/Utils/altitude_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/navigation_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/speed_provider.dart';
+import 'package:accident/Presentation/dashboard/components/accident_confirmation_popup.dart';
 import 'package:accident/Presentation/dashboard/components/auto_scroll_icon_carosel.dart';
 import 'package:accident/Presentation/dashboard/components/container_reuse.dart';
 import 'package:accident/Presentation/dashboard/components/wide_container_with_text.dart';
@@ -16,6 +18,54 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool _isPopupOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final detected = context.read<AccidentDetectionProvider>();
+
+      if (detected.isAccidentDetected && !_isPopupOpen) {
+        _navigateToAccidentPopup();
+      }
+
+      detected.addListener(_accidentListener);
+    });
+  }
+
+  void _accidentListener() {
+    final detected = context.read<AccidentDetectionProvider>();
+
+    if (detected.isAccidentDetected && !_isPopupOpen) {
+      _navigateToAccidentPopup();
+    }
+  }
+
+  void _navigateToAccidentPopup() {
+    _isPopupOpen = true;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AccidentPopup(
+          onTimeout: () {
+            Navigator.of(context).pop();
+            _isPopupOpen = false;
+          },
+        ),
+      ),
+    ).then((_) {
+      _isPopupOpen = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    context.read<AccidentDetectionProvider>().removeListener(_accidentListener);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

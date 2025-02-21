@@ -1,8 +1,5 @@
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
 import 'package:accident/Presentation/Profile/Pages/user_profile_details.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
 import 'package:accident/Presentation/dashboard/pages/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,35 +12,13 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  ProfilePageModel? _userData;
-
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
-  }
-
-  Future<void> _fetchUserData() async {
-    try {
-      String email = FirebaseAuth.instance.currentUser!.email!;
-      ProfilePageModel? userData =
-          await FireStoreProfileData().getUserData(email);
-      if (userData != null) {
-        setState(() {
-          _userData = userData;
-        });
-      }
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching user data: $e')),
-      );
-    }
   }
 
   final List<Widget> _widgetOptions = <Widget>[
     const MainPage(),
-    // const AccidentListWidget(),
     const UserProfilePage()
   ];
 

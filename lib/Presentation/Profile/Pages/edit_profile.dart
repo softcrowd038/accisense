@@ -1,10 +1,12 @@
-import 'package:accident/Presentation/Navigation/page_navigation.dart';
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
+import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_textfield.dart';
 import 'package:accident/Presentation/Profile/Widgets/profile_picture.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
+import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +19,8 @@ class EditProfileDetails extends StatefulWidget {
 
 class _EditProfileDetailsState extends State<EditProfileDetails> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _allergiesController = TextEditingController();
+  final TextEditingController _medicalHistory = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _guardianController = TextEditingController();
   final TextEditingController _relationController = TextEditingController();
@@ -25,7 +28,8 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
       TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  ProfilePageModel? _userData;
+  UserProfileDetails? _userData;
+  User? _user;
 
   @override
   void initState() {
@@ -36,7 +40,8 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
   @override
   void dispose() {
     _nameController.dispose();
-    _emailController.dispose();
+    _allergiesController.dispose();
+    _medicalHistory.dispose();
     _phoneController.dispose();
     _guardianController.dispose();
     _relationController.dispose();
@@ -46,51 +51,122 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
   }
 
   void _updateName(String value) {
-    _userData?.setName(value);
+    _user?.setName(value);
   }
 
-  void _updateEmail(String value) {
-    _userData?.setEmail(value);
+  void _updateAllergies(List<String> value) {
+    Provider.of<User>(context, listen: false).setAllergies(value);
+  }
+
+  void _updateMedicalHistory(List<String> value) {
+    Provider.of<User>(context, listen: false).setMedicalHistory(value);
   }
 
   void _updatePhone(String value) {
-    _userData?.setPhone(value);
+    _user?.setMobileNumber(value);
   }
 
   void _updateEmergencyContactName(String value) {
-    _userData?.setEmergencyContactName(value);
+    _user!.setemergencyContacts([
+      EmergencyContact(
+          name: value,
+          relation: _userData!.emergencyContacts!.first.relation,
+          mobile: _userData!.emergencyContacts!.first.mobile)
+    ]);
   }
 
   void _updateRelation(String value) {
-    _userData?.setRelation(value);
+    _user!.setemergencyContacts([
+      EmergencyContact(
+          name: _userData!.emergencyContacts!.first.name,
+          relation: value,
+          mobile: _userData!.emergencyContacts!.first.mobile)
+    ]);
   }
 
   void _updateEmergencyPhone(String value) {
-    _userData?.setEmergencyPhone(value);
+    _user!.setemergencyContacts([
+      EmergencyContact(
+          name: _userData!.emergencyContacts!.first.name,
+          relation: _userData!.emergencyContacts!.first.relation,
+          mobile: value)
+    ]);
   }
 
   void _updateAddress(String value) {
-    _userData?.setAddress(value);
+    _user?.setAddress(value);
   }
 
   Future<void> _fetchUserData() async {
     try {
-      final String email = FirebaseAuth.instance.currentUser!.email!;
-      final userData = await FireStoreProfileData().getUserData(email);
-      if (userData != null) {
+      UserProfileService? userData = UserProfileService();
+      final userProfileDetails = await userData.getUserProfile();
+      if (userProfileDetails != null) {
         setState(() {
-          _userData = userData;
-          _nameController.text = _userData!.name ?? '';
-          _emailController.text = _userData!.email ?? '';
-          _phoneController.text = _userData!.phone ?? '';
-          _guardianController.text = _userData!.emergencyContactName ?? '';
-          _relationController.text = _userData!.relation ?? '';
-          _emergencyPhoneController.text = _userData!.emergencyPhone ?? '';
-          _addressController.text = _userData!.address ?? '';
+          _userData = userProfileDetails;
         });
       }
+      print(_user?.image);
+      setState(() {
+        _nameController.text = _userData!.name ?? '';
+        _allergiesController.text = _userData!.allergies!.first;
+        _medicalHistory.text = _userData!.medicalHistory!.first;
+        _phoneController.text = _userData!.mobileNumber ?? '';
+        _guardianController.text = _userData!.emergencyContacts!.first.name;
+        _relationController.text = _userData!.emergencyContacts!.first.relation;
+        _emergencyPhoneController.text =
+            _userData!.emergencyContacts!.first.mobile;
+        _addressController.text = _userData!.address ?? '';
+      });
     } catch (e) {
       Text('Error fetching user data: $e');
+    }
+  }
+
+  Future<void> _updateUserProfile() async {
+    if (_formKey.currentState!.validate()) {
+      final user = Provider.of<User>(context, listen: false);
+      try {
+        print(user.image);
+        final Map<String, dynamic> updatedFields = {
+          'name': _nameController.text,
+          'address': _addressController.text,
+          'image': user.image,
+          'allergies': _allergiesController.text
+              .split(',')
+              .map((e) => e.trim())
+              .toList(),
+          'medical_history':
+              _medicalHistory.text.split(',').map((e) => e.trim()).toList(),
+          'mobile_number': _phoneController.text,
+          'emergency_contacts': [
+            {
+              'name': _guardianController.text,
+              'relation': _relationController.text,
+              'mobile': _emergencyPhoneController.text,
+            },
+          ],
+        };
+
+        UserRegistrationLogin userRegistrationLogin = UserRegistrationLogin();
+        final updatedUser =
+            await userRegistrationLogin.updateUser(context, updatedFields);
+
+        if (updatedUser != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Profile updated successfully!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Failed to update profile. Please try again.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error updating profile: $e')),
+        );
+      }
     }
   }
 
@@ -130,35 +206,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.text,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.person,
                           color: Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomTextField(
-                        onChanged: (value) {
-                          _updateEmail(value);
-                        },
-                        obscureText: false,
-                        hint: "xyz123@pqr.abc",
-                        label: "Email",
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Enter your Email first!";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        color: Colors.black,
-                        suffixIcon: const Icon(
-                          Icons.email,
-                          color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -181,10 +232,62 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.text,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.home,
                           color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomTextField(
+                        onChanged: (value) {
+                          _updateAllergies(
+                              value.split(',').map((e) => e.trim()).toList());
+                        },
+                        obscureText: false,
+                        hint: "e.g. \"penicillin\", \"dust\"",
+                        label: "allergies",
+                        controller: _allergiesController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Enter your allergies first!";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        color: Colors.black,
+                        suffixIcon: Icon(
+                          Icons.vaccines,
+                          color: Colors.black,
+                          size: MediaQuery.of(context).size.height * 0.025,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomTextField(
+                        onChanged: (value) {
+                          _updateMedicalHistory(
+                              value.split(',').map((e) => e.trim()).toList());
+                        },
+                        obscureText: false,
+                        hint: "e.g. Asthama",
+                        label: "Medical History",
+                        controller: _medicalHistory,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Enter your Details first!";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        color: Colors.black,
+                        suffixIcon: Icon(
+                          Icons.medical_information,
+                          color: Colors.black,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -206,10 +309,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.phone,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.phone,
                           color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -221,7 +324,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         obscureText: false,
                         hint: "eg. Alex Doe",
-                        label: "Guardien",
+                        label: "Emergency Contact name",
                         controller: _guardianController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -231,10 +334,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.text,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.person_2,
                           color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -256,10 +359,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.text,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.group,
                           color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -281,10 +384,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                         },
                         keyboardType: TextInputType.phone,
                         color: Colors.black,
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.phone_android,
                           color: Colors.black,
-                          size: 30,
+                          size: MediaQuery.of(context).size.height * 0.025,
                         ),
                       ),
                     ),
@@ -295,25 +398,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
             GestureDetector(
               onTap: () {
                 if (_formKey.currentState!.validate()) {
-                  final profilePageModel =
-                      Provider.of<ProfilePageModel>(context, listen: false);
-                  FireStoreProfileData().storeUserData(
-                      profilePageModel.imageurl,
-                      _nameController.text,
-                      _emailController.text,
-                      _phoneController.text,
-                      _guardianController.text,
-                      _relationController.text,
-                      _emergencyPhoneController.text,
-                      _addressController.text,
-                      profilePageModel.birthdate,
-                      profilePageModel.gender);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ),
-                  );
+                  _updateUserProfile();
                 }
               },
               child: Padding(

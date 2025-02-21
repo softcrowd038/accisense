@@ -1,4 +1,3 @@
-import 'package:accident/Presentation/Navigation/page_navigation.dart';
 import 'package:accident/Presentation/login_and_registration/Services/auth_session.dart';
 import 'package:accident/Presentation/splashScreen/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +11,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AuthSessionProvider>(
-      create: (_) =>
-          AuthSessionProvider(), // Instantiate AuthSessionProvider here
+      create: (_) => AuthSessionProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         theme: ThemeData(
           fontFamily: 'Roboto',
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -27,17 +28,7 @@ class _MyAppState extends State<MyApp> {
             unselectedItemColor: Colors.grey,
           ),
         ),
-        home: Consumer<AuthSessionProvider>(
-          builder: (context, authProvider, _) {
-            switch (authProvider.status) {
-              case AuthStatus.authenticated:
-                return const HomePage();
-              case AuthStatus.unauthenticated:
-                return const SplashScreen();
-            }
-          },
-        ),
-        // home: const SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

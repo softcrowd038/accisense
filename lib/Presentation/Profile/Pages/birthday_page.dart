@@ -1,7 +1,8 @@
-import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
+import 'package:accident/Presentation/Profile/Pages/medical_history_page.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_calender.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:flutter/material.dart';
+
 
 class BirthDatePage extends StatefulWidget {
   const BirthDatePage({super.key});
@@ -70,7 +71,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => const ContactListScreen())));
+                        builder: ((context) => const MedicalHistoryPage())));
               },
               child: Padding(
                 padding:

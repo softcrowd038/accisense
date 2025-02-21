@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:accident/Presentation/Accident_Detection/Pages/get_data.dart';
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
+import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Pages/edit_profile.dart';
-import 'package:accident/Presentation/Profile/Services/profile_firestore_databse.dart';
+import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_user_personel_details.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -15,7 +13,7 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  ProfilePageModel? _userData;
+  UserProfileDetails? _userData;
 
   @override
   void initState() {
@@ -25,16 +23,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<void> _fetchUserData() async {
     try {
-      String email = FirebaseAuth.instance.currentUser!.email!;
-      ProfilePageModel? userData =
-          await FireStoreProfileData().getUserData(email);
-      if (userData != null) {
+      UserProfileService? userData = UserProfileService();
+      final userProfileDetails = await userData.getUserProfile();
+      if (userProfileDetails != null) {
         setState(() {
-          _userData = userData;
+          _userData = userProfileDetails;
         });
       }
     } catch (e) {
-      // ignore: avoid_print
       print('Error fetching user data: $e');
     }
   }
@@ -81,7 +77,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 radius:
                                     MediaQuery.of(context).size.height * 0.06,
                                 backgroundImage:
-                                    FileImage(File(_userData!.imageurl ?? '')),
+                                    NetworkImage('${_userData!.image}'),
                               ),
                             ),
                           ),
@@ -139,7 +135,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   if (_userData != null)
                     Center(
                       child: Text(
-                        '+91 ${_userData!.phone}',
+                        '+91 ${_userData!.mobileNumber}',
                         style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * 0.0160,
                           fontWeight: FontWeight.w400,

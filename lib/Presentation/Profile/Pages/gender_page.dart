@@ -1,8 +1,7 @@
 import 'package:accident/Presentation/Profile/Pages/birthday_page.dart';
+import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:accident/Presentation/Profile/Model/profile_page_model.dart';
 
 class GenderPage extends StatefulWidget {
   const GenderPage({Key? key}) : super(key: key);
@@ -48,7 +47,7 @@ class GenderPageState extends State<GenderPage> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: Consumer<ProfilePageModel>(
+          child: Consumer<User>(
             builder: (context, genderProvider, _) {
               return Padding(
                 padding: EdgeInsets.all(size.width * 0.05),
@@ -93,7 +92,7 @@ class GenderPageState extends State<GenderPage> {
                               children: [
                                 Expanded(
                                   child: RadioListTile<String>(
-                                    value: 'Male',
+                                    value: 'male',
                                     activeColor: const Color(0xff020053),
                                     groupValue: genderProvider.gender,
                                     onChanged: (value) {
@@ -108,7 +107,7 @@ class GenderPageState extends State<GenderPage> {
                                 ),
                                 Expanded(
                                   child: RadioListTile<String>(
-                                    value: 'Female',
+                                    value: 'female',
                                     activeColor: const Color(0xff020053),
                                     groupValue: genderProvider.gender,
                                     onChanged: (value) {
