@@ -1,7 +1,6 @@
 import 'package:accident/Presentation/Profile/Pages/profile_details.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
-import 'package:accident/Presentation/login_and_registration/Services/signup_signin.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/common_textform_field.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:accident/Presentation/login_and_registration/pages/login_registration.dart';

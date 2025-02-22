@@ -15,20 +15,14 @@ class PersonalInfoPage extends StatefulWidget {
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _addressController = TextEditingController();
-  }
-
-  void _updateEmail(String value) {
-    Provider.of<User>(context, listen: false).setEmail(value);
   }
 
   void _updatePhone(String value) {
@@ -41,7 +35,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(

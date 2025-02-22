@@ -1,5 +1,4 @@
 import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
-import 'package:accident/Presentation/Profile/Pages/gender_page.dart';
 import 'package:accident/Presentation/Profile/Widgets/custom_textfield.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';

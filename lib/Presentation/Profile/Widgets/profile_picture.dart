@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
-import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:accident/data/common_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -102,7 +101,6 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     return Stack(
       alignment: Alignment.center,
       children: [

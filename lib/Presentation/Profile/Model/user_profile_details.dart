@@ -16,7 +16,7 @@ class UserProfileDetails extends ChangeNotifier {
   final List<String>? medicalHistory;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final dynamic? image;
+  final dynamic image;
   final List<EmergencyContact>? emergencyContacts;
 
   UserProfileDetails({

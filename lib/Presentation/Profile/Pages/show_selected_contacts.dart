@@ -1,4 +1,3 @@
-import 'package:accident/Presentation/Navigation/page_navigation.dart';
 import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
@@ -21,14 +20,13 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize a TextEditingController for each contact
+
     relationControllers = List.generate(
         widget.selectedContacts.length, (index) => TextEditingController());
   }
 
   @override
   void dispose() {
-    // Dispose controllers to free memory
     for (var controller in relationControllers) {
       controller.dispose();
     }
@@ -118,7 +116,6 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
           widget.selectedContacts.isNotEmpty
               ? GestureDetector(
                   onTap: () {
-                 
                     UserRegistrationLogin userRegistrationLogin =
                         UserRegistrationLogin();
                     userRegistrationLogin.registerUser(context);

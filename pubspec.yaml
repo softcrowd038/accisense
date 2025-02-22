@@ -56,7 +56,7 @@ dependencies:
   flutter_background_service_android:
   flutter_background_service_ios:
   flutter_local_notifications:
-  shared_preferences:
+  shared_preferences: ^2.2.2
   workmanager:
   connectivity_plus:
   awesome_notifications:
@@ -75,15 +75,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_launcher_icons:
-
+  flutter_launcher_icons: "^0.14.3"
 
 flutter_launcher_icons:
-android: "launcher_icon"
-ios: true
-image_path: "assets/images/logo.jpeg"
-android_icons:
-background: "#000000"
+  android: true
+  ios: true
+  image_path: "assets/images/logo.jpeg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

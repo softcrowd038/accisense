@@ -2,11 +2,9 @@
 
 import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
-import 'package:accident/Presentation/login_and_registration/Services/auth_session.dart';
 import 'package:accident/Presentation/login_and_registration/pages/login_registration.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -230,9 +228,8 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
                         Expanded(
                           child: Text(
                             _userData!.medicalHistory!.isNotEmpty
-                                ? _userData!.medicalHistory!
-                                    .join(', ') // Join history entries
-                                : 'No medical history available.', // Fallback message
+                                ? _userData!.medicalHistory!.join(', ')
+                                : 'No medical history available.',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -261,9 +258,8 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
                         Expanded(
                           child: Text(
                             _userData!.allergies!.isNotEmpty
-                                ? _userData!.allergies!
-                                    .join(', ') // Join history entries
-                                : 'No medical history available.', // Fallback message
+                                ? _userData!.allergies!.join(', ')
+                                : 'No medical history available.',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
