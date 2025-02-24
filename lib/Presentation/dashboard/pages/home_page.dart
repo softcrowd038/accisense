@@ -19,50 +19,49 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   bool _isPopupOpen = false;
+  AccidentDetectionProvider? _detected;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _detected ??= context.read<AccidentDetectionProvider>();
+    _detected!.addListener(_accidentListener);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final detected = context.read<AccidentDetectionProvider>();
-
-      if (detected.isAccidentDetected && !_isPopupOpen) {
-        _navigateToAccidentPopup();
-      }
-
-      detected.addListener(_accidentListener);
-    });
+    if (_detected!.isAccidentDetected && !_isPopupOpen) {
+      _navigateToAccidentPopup();
+    }
   }
 
   void _accidentListener() {
-    final detected = context.read<AccidentDetectionProvider>();
-
-    if (detected.isAccidentDetected && !_isPopupOpen) {
+    if (!mounted) return;
+    if (_detected!.isAccidentDetected && !_isPopupOpen) {
       _navigateToAccidentPopup();
     }
   }
 
   void _navigateToAccidentPopup() {
+    if (!mounted) return;
     _isPopupOpen = true;
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AccidentPopup(
           onTimeout: () {
-            Navigator.of(context).pop();
-            _isPopupOpen = false;
+            if (mounted) {
+              Navigator.of(context).pop();
+              _isPopupOpen = false;
+            }
           },
         ),
       ),
     ).then((_) {
-      _isPopupOpen = false;
+      if (mounted) _isPopupOpen = false;
     });
   }
 
   @override
   void dispose() {
-    context.read<AccidentDetectionProvider>().removeListener(_accidentListener);
+    _detected?.removeListener(_accidentListener);
     super.dispose();
   }
 
