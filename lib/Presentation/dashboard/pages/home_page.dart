@@ -1,5 +1,6 @@
 import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
 import 'package:accident/Presentation/GoogleMapIntegration/live_location.dart';
+import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/dashboard/Utils/altitude_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/navigation_provider.dart';
 import 'package:accident/Presentation/dashboard/Utils/speed_provider.dart';
@@ -20,6 +21,27 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool _isPopupOpen = false;
   AccidentDetectionProvider? _detected;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      UserProfileService userData = UserProfileService();
+      final userProfileDetails = await userData.getUserOnlyProfile(context);
+      if (userProfileDetails != null) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error fetching user data: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   void didChangeDependencies() {

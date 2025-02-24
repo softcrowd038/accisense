@@ -23,7 +23,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<void> _fetchUserData() async {
     try {
-      UserProfileService? userData = UserProfileService();
+      UserProfileService userData = UserProfileService();
       final userProfileDetails = await userData.getUserProfile();
       if (userProfileDetails != null) {
         setState(() {
@@ -31,7 +31,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
         });
       }
     } catch (e) {
-      print('Error fetching user data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error fetching user data: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

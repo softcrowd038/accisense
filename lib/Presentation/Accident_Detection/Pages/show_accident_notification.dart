@@ -8,8 +8,8 @@ class NotificationService {
           id: 10,
           channelKey: "accident_channel",
           title: "Accident Detected",
-          body: "Is these is an Accident Confirm.",
-          color: Colors.orange),
+          body: "Is these is an Accident Confirm.",  
+          color: Colors.white),
       actionButtons: [
         NotificationActionButton(
           key: "cancel",
