@@ -1,13 +1,13 @@
 // ignore_for_file: avoid_print
 import 'package:accident/Presentation/Profile/Pages/show_selected_contacts.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/contact.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 class ContactListScreen extends StatefulWidget {
   const ContactListScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ContactListScreenState createState() => _ContactListScreenState();
 }
 
@@ -24,27 +24,33 @@ class _ContactListScreenState extends State<ContactListScreen> {
     _searchController.addListener(_filterContacts);
   }
 
-  // Future<void> _requestPermission() async {
-  //   if (await Permission.contacts.request().isGranted) {
-  //     _fetchContacts();
-  //   } else {
-  //     print("did not get permission");
-  //   }
-  // }
-
   Future<void> _fetchContacts() async {
-    final Iterable<Contact> contacts = await ContactsService.getContacts();
-    setState(() {
-      _contacts = contacts.toList();
-      _filteredContacts = _contacts;
-    });
+    bool permission = await FlutterContacts.requestPermission();
+    if (permission) {
+      List<Contact> contacts = await FlutterContacts.getContacts(
+        withProperties: true,
+        withAccounts: true,
+      );
+
+      for (var contact in contacts) {
+        print('Name: ${contact.displayName}');
+        print('Phones: ${contact.phones.map((e) => e.number).toList()}');
+      }
+
+      setState(() {
+        _contacts = contacts;
+        _filteredContacts = _contacts;
+      });
+    } else {
+      print("Permission denied");
+    }
   }
 
   void _filterContacts() {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _filteredContacts = _contacts.where((contact) {
-        final name = contact.displayName?.toLowerCase() ?? '';
+        final name = contact.displayName.toLowerCase();
         return name.contains(query);
       }).toList();
     });
@@ -68,6 +74,16 @@ class _ContactListScreenState extends State<ContactListScreen> {
         ),
       ),
     );
+  }
+
+  String _getInitials(String name) {
+    List<String> nameParts = name.trim().split(' ');
+    if (nameParts.length > 1) {
+      return nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase();
+    } else if (nameParts.isNotEmpty) {
+      return nameParts[0][0].toUpperCase();
+    }
+    return "?";
   }
 
   @override
@@ -123,23 +139,22 @@ class _ContactListScreenState extends State<ContactListScreen> {
                 Contact contact = _filteredContacts[index];
                 bool isSelected = _selectedContacts.contains(contact);
                 return ListTile(
-                  title: Text(contact.displayName ?? 'No name'),
-                  subtitle: Text(contact.phones?.isNotEmpty ?? false
-                      ? contact.phones!.first.value!
+                  title: Text(contact.displayName),
+                  subtitle: Text(contact.phones.isNotEmpty
+                      ? contact.phones.map((e) => e.number).join(", ")
                       : 'No phone number'),
-                  leading: Column(children: [
-                    (contact.avatar != null && contact.avatar!.isNotEmpty)
-                        ? CircleAvatar(
-                            backgroundImage: MemoryImage(contact.avatar!),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    backgroundImage: contact.thumbnail != null
+                        ? MemoryImage(contact.thumbnail!)
+                        : null,
+                    child: contact.thumbnail == null
+                        ? Text(
+                            _getInitials(contact.displayName),
+                            style: const TextStyle(color: Colors.white),
                           )
-                        : CircleAvatar(
-                            backgroundColor: Colors.blue,
-                            child: Text(
-                              contact.initials(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                  ]),
+                        : null,
+                  ),
                   trailing: isSelected
                       ? const Icon(Icons.check_box)
                       : const Icon(Icons.check_box_outline_blank),

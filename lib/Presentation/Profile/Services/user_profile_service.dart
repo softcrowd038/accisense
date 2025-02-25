@@ -60,7 +60,7 @@ class UserProfileService {
 
       if (response.statusCode == 200) {
         return UserProfileDetails.fromRawJson(response.body);
-      } else if (response.statusCode == 401) {
+      } else if (response.statusCode == 401 || response.statusCode == 404 ) {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         bool logoutStatus = await sharedPreferences.remove('auth_token');

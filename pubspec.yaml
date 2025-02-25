@@ -60,10 +60,10 @@ dependencies:
   workmanager:
   connectivity_plus:
   awesome_notifications:
-  contacts_service:
   intl:
   url_launcher:
   percent_indicator: ^4.2.4
+  flutter_contacts: ^1.1.9+2
 
 dev_dependencies:
   flutter_test:

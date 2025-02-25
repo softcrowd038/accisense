@@ -2,7 +2,7 @@ import 'package:accident/Presentation/Profile/Pages/emergency_contact_page.dart'
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
 import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:flutter/material.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:provider/provider.dart';
 
 class SelectedContactsScreen extends StatefulWidget {
@@ -20,7 +20,6 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
   @override
   void initState() {
     super.initState();
-
     relationControllers = List.generate(
         widget.selectedContacts.length, (index) => TextEditingController());
   }
@@ -31,6 +30,16 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  String _getInitials(String name) {
+    List<String> nameParts = name.trim().split(' ');
+    if (nameParts.length > 1) {
+      return nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase();
+    } else if (nameParts.isNotEmpty) {
+      return nameParts[0][0].toUpperCase();
+    }
+    return "?";
   }
 
   @override
@@ -55,26 +64,26 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
                       vertical: 8.0, horizontal: 16.0),
                   child: ListTile(
                     leading:
-                        (contact.avatar != null && contact.avatar!.isNotEmpty)
+                        (contact.photo != null && contact.photo!.isNotEmpty)
                             ? CircleAvatar(
-                                backgroundImage: MemoryImage(contact.avatar!),
+                                backgroundImage: MemoryImage(contact.photo!),
                               )
                             : CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Text(
-                                  contact.initials(),
+                                  _getInitials(contact.displayName),
                                   style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                     title: Text(
-                      contact.displayName ?? 'No name',
+                      contact.displayName,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(contact.phones?.isNotEmpty ?? false
-                            ? contact.phones!.first.value!
+                        Text(contact.phones.isNotEmpty
+                            ? contact.phones.first.number
                             : 'No phone number'),
                         const SizedBox(height: 8),
                         TextField(
@@ -86,16 +95,10 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
                             border: const OutlineInputBorder(),
                           ),
                           onChanged: (value) {
-                            String contactPhone = widget.selectedContacts[index]
-                                        .phones?.isNotEmpty ==
-                                    true
-                                ? widget.selectedContacts[index].phones!.first
-                                        .value ??
-                                    ''
+                            String contactPhone = contact.phones.isNotEmpty
+                                ? contact.phones.first.number
                                 : '';
-                            String contactName =
-                                widget.selectedContacts[index].displayName ??
-                                    '';
+                            String contactName = contact.displayName;
                             final contactDetails =
                                 Provider.of<User>(context, listen: false);
                             contactDetails.setemergencyContacts([
