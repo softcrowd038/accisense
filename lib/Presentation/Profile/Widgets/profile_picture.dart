@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/login_and_registration/Model/user_profile.dart';
-import 'package:accident/data/common_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -126,8 +125,7 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
             backgroundImage: _selectedImage != null
                 ? FileImage(_selectedImage!)
                 : (_userData?.image != null
-                    ? NetworkImage('$imageBaseUrl/${_userData!.image}')
-                        as ImageProvider
+                    ? NetworkImage('${_userData!.image}') as ImageProvider
                     : null),
             child: (_selectedImage == null && _userData?.image == null)
                 ? Icon(
