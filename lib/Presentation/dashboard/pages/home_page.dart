@@ -90,7 +90,7 @@ class _MainPageState extends State<MainPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SpeedTrackerNotifier>(
-          create: (_) => SpeedTrackerNotifier(),
+          create: (_) => SpeedTrackerNotifier()..requestLocationPermission(),
         ),
         ChangeNotifierProvider<AltitudeTracker>(
           create: (_) => AltitudeTracker(),

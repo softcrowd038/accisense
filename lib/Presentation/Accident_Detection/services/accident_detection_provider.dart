@@ -209,13 +209,9 @@ class AccidentDetectionProvider extends ChangeNotifier {
     String emergencyNumber = _userData!.emergencyContacts!.first.mobile;
     final Uri phoneUri = Uri(scheme: "tel", path: emergencyNumber);
 
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-      // FlutterPhoneDirectCaller.callNumber(emergencyNumber);
-      print("Calling emergency contact: $emergencyNumber");
-    } else {
-      print('no call is placed');
-    }
+    await launchUrl(phoneUri);
+    // FlutterPhoneDirectCaller.callNumber(emergencyNumber);
+    print("Calling emergency contact: $emergencyNumber");
   }
 
   void sendEmergencySMS() async {

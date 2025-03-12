@@ -48,16 +48,12 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    final uri = Uri(scheme: 'tel', path: phoneNumber);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not launch phone dialer.'),
-        ),
-      );
-    }
+    String formattedNumber = phoneNumber.startsWith('+')
+        ? phoneNumber
+        : '+91$phoneNumber'; // Assuming India
+    final Uri uri = Uri.parse('tel:$formattedNumber');
+
+    await launchUrl(uri);
   }
 
   @override

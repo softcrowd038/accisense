@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
-import 'package:accident/Presentation/Navigation/page_navigation.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

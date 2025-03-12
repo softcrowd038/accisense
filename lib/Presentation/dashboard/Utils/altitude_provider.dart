@@ -7,7 +7,6 @@ class AltitudeTracker extends ChangeNotifier {
   double _altitude = 0.0;
   StreamSubscription<Position>? _positionStreamSubscription;
   Color _color = Colors.white;
-
   double get altitude => _altitude;
   Color get color => _color;
 
