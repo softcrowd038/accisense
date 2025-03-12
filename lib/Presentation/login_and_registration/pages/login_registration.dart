@@ -2,7 +2,6 @@ import 'package:accident/Presentation/login_and_registration/Model/user_.dart';
 import 'package:accident/Presentation/login_and_registration/Services/user_registration_login.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/common_textform_field.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
-import 'package:accident/Presentation/login_and_registration/pages/forget_password.dart';
 import 'package:accident/Presentation/login_and_registration/pages/registration_.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -164,28 +163,6 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             },
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              ForgotPasswordScreen())));
-                                },
-                                child: Text(
-                                  " Forget password?",
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.016,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey),
-                                )),
-                          ],
                         ),
                         GestureDetector(
                           onTap: () {

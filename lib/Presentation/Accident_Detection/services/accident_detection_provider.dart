@@ -12,7 +12,7 @@ import 'package:accident/data/common_data.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sensors/sensors.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
 import 'package:url_launcher/url_launcher.dart';

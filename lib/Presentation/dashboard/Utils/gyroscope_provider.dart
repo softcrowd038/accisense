@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sensors/sensors.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class GyroscopeProvider extends ChangeNotifier {
   bool _isMonitoring = false;

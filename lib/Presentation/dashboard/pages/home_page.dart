@@ -69,10 +69,8 @@ class _MainPageState extends State<MainPage> {
       MaterialPageRoute(
         builder: (context) => AccidentPopup(
           onTimeout: () {
-            if (mounted) {
-              Navigator.of(context).pop();
-              _isPopupOpen = false;
-            }
+            Navigator.of(context).pop();
+            _isPopupOpen = false;
           },
         ),
       ),

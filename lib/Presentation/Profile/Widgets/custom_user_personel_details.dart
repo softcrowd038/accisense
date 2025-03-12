@@ -4,7 +4,6 @@ import 'package:accident/Presentation/Profile/Model/user_profile_details.dart';
 import 'package:accident/Presentation/Profile/Services/user_profile_service.dart';
 import 'package:accident/Presentation/login_and_registration/pages/login_registration.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -272,17 +271,10 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
               );
             }).toList(),
           )
-        : Center(
-            child: Transform.scale(
-            scale: 0.1,
-            child: LiquidCircularProgressIndicator(
-              value: 0.5,
-              valueColor: const AlwaysStoppedAnimation(Colors.yellow),
-              backgroundColor: Colors.black,
-              borderColor: Colors.yellow,
-              borderWidth: 1.0,
-              direction: Axis.vertical,
+        : const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xff020053),
             ),
-          ));
+          );
   }
 }
