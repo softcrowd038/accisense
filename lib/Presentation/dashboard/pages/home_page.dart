@@ -93,7 +93,7 @@ class _MainPageState extends State<MainPage> {
           create: (_) => SpeedTrackerNotifier()..requestLocationPermission(),
         ),
         ChangeNotifierProvider<AltitudeTracker>(
-          create: (_) => AltitudeTracker(),
+          create: (_) => AltitudeTracker()..requestLocationPermission(),
         ),
         ChangeNotifierProvider<NavigationProvider>(
           create: (_) => NavigationProvider(),

@@ -48,10 +48,7 @@ class _CustomUserPersonalDetailsState extends State<CustomUserPersonalDetails> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    String formattedNumber = phoneNumber.startsWith('+')
-        ? phoneNumber
-        : '+91$phoneNumber'; // Assuming India
-    final Uri uri = Uri.parse('tel:$formattedNumber');
+    final Uri uri = Uri.parse('tel:$phoneNumber');
 
     await launchUrl(uri);
   }
