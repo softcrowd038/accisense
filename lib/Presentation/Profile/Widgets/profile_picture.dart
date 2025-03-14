@@ -131,7 +131,7 @@ class ProfilePictureFieldState extends State<ProfilePictureField> {
                 ? Icon(
                     Icons.person,
                     size: MediaQuery.of(context).size.height * 0.06,
-                    color: const Color(0xff020053),
+                    color: Colors.black,
                   )
                 : null,
           ),

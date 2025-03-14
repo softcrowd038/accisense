@@ -61,7 +61,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff020053),
+      backgroundColor: const Color(0xffad2c24),
       body: Consumer<UserCredentials>(
         builder: (context, userCredentials, child) => Form(
           key: _formKey,
@@ -79,7 +79,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           children: [
                             Image(
                                 image: const AssetImage(
-                                  'assets/images/logo1.png',
+                                  'assets/images/logo6.png',
                                 ),
                                 height:
                                     MediaQuery.of(context).size.height * 0.180,
@@ -89,7 +89,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               top: MediaQuery.of(context).size.height * 0.140,
                               left: MediaQuery.of(context).size.height * 0.045,
                               child: Text(
-                                'ACCIDETECT',
+                                'ACCISENSE',
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.height *

@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff020053),
+      backgroundColor: const Color(0xffad2c24),
       body: Consumer<UserCredentials>(
         builder: (context, userCredentials, child) => Form(
           key: _formKey,
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Image(
                           image: const AssetImage(
-                            'assets/images/logo1.png',
+                            'assets/images/logo6.png',
                           ),
                           height: MediaQuery.of(context).size.height * 0.180,
                           width: MediaQuery.of(context).size.height * 0.180),
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         top: MediaQuery.of(context).size.height * 0.140,
                         left: MediaQuery.of(context).size.height * 0.045,
                         child: Text(
-                          'ACCIDETECT',
+                          'ACCISENSE',
                           style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.height * 0.0140,
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 ClipPath(
                   clipper: CustomDiagonalClipper(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.73,
+                    height: MediaQuery.of(context).size.height * 0.75,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                       color: Colors.white,

@@ -36,36 +36,22 @@ class HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 253, 228, 1)),
-        title: Stack(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image(
-                    image: const AssetImage("assets/images/logo1.png"),
-                    height: MediaQuery.of(context).size.height * 0.10,
-                    width: MediaQuery.of(context).size.height * 0.10,
-                  ),
-                ],
-              ),
+            const Text(
+              "ACCISENSE",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.035,
-              left: MediaQuery.of(context).size.width * 0.17,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Accidetect",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            SizedBox(width: MediaQuery.of(context).size.height * 0.010),
+            Image(
+              image: const AssetImage("assets/images/logo7.png"),
+              height: MediaQuery.of(context).size.height * 0.040,
+              width: MediaQuery.of(context).size.height * 0.040,
             ),
           ],
         ),
@@ -74,7 +60,7 @@ class HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xff020053),
+        selectedItemColor: const Color(0xffad2c24),
         unselectedItemColor: Colors.grey,
         elevation: 5,
         currentIndex: _selectedIndex,

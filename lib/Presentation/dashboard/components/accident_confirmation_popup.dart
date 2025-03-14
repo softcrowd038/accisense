@@ -71,7 +71,7 @@ class _AccidentPopupState extends State<AccidentPopup> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Accidetect",
+                    "AcciSense",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -104,7 +104,7 @@ class _AccidentPopupState extends State<AccidentPopup> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xff020053).withOpacity(0.2),
+                      color: Colors.black.withOpacity(0.2),
                     ),
                     child: Text(
                       "$_counter",

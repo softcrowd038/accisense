@@ -3,7 +3,6 @@ import 'package:accident/Presentation/Profile/Widgets/custom_calender.dart';
 import 'package:accident/Presentation/login_and_registration/Widgets/custom_button_.dart';
 import 'package:flutter/material.dart';
 
-
 class BirthDatePage extends StatefulWidget {
   const BirthDatePage({super.key});
 
@@ -54,7 +53,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
               child: Text(
                 "select your birthday 🎉 ",
                 style: TextStyle(
-                    color: const Color(0xff020053),
+                    color: Colors.black,
                     fontSize: MediaQuery.of(context).size.height * 0.018,
                     fontWeight: FontWeight.w300),
               ),

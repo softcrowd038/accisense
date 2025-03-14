@@ -58,7 +58,7 @@ class GenderPageState extends State<GenderPage> {
                     Text(
                       "select your gender",
                       style: TextStyle(
-                        color: const Color(0xff020053),
+                        color: Colors.black,
                         fontSize: MediaQuery.of(context).size.height * 0.018,
                         fontWeight: FontWeight.w300,
                       ),
@@ -93,7 +93,7 @@ class GenderPageState extends State<GenderPage> {
                                 Expanded(
                                   child: RadioListTile<String>(
                                     value: 'male',
-                                    activeColor: const Color(0xff020053),
+                                    activeColor: Colors.black,
                                     groupValue: genderProvider.gender,
                                     onChanged: (value) {
                                       genderProvider.setGender(value!);
@@ -108,7 +108,7 @@ class GenderPageState extends State<GenderPage> {
                                 Expanded(
                                   child: RadioListTile<String>(
                                     value: 'female',
-                                    activeColor: const Color(0xff020053),
+                                    activeColor: Colors.black,
                                     groupValue: genderProvider.gender,
                                     onChanged: (value) {
                                       genderProvider.setGender(value!);

@@ -84,7 +84,7 @@ class _MedicalHistoryPageState extends State<MedicalHistoryPage> {
                       Text(
                         'enter your Medical History',
                         style: TextStyle(
-                            color: const Color(0xff020053),
+                            color: Colors.black,
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.018,
                             fontWeight: FontWeight.w300),

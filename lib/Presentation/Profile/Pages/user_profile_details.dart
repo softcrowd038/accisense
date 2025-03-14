@@ -62,8 +62,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             height: MediaQuery.of(context).size.height * 0.13,
                             width: MediaQuery.of(context).size.height * 0.13,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xff020053), width: 2),
+                              border: Border.all(color: Colors.black, width: 2),
                               borderRadius: BorderRadius.circular(
                                 MediaQuery.of(context).size.height * 0.065,
                               ),
@@ -110,7 +109,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   borderRadius: BorderRadius.circular(
                                     MediaQuery.of(context).size.height * 0.02,
                                   ),
-                                  color: const Color(0xff020053),
+                                  color: Colors.black,
                                 ),
                                 child: const Icon(
                                   Icons.edit,
@@ -144,7 +143,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * 0.0160,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xff020053),
+                          color: Colors.black,
                         ),
                       ),
                     ),

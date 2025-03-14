@@ -81,7 +81,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       Text(
                         'enter your profile details',
                         style: TextStyle(
-                            color: const Color(0xff020053),
+                            color: Colors.black,
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.018,
                             fontWeight: FontWeight.w300),
