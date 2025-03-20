@@ -1,17 +1,16 @@
 // ignore_for_file: avoid_print
 import 'package:accident/Presentation/Profile/Pages/show_selected_contacts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 class ContactListScreen extends StatefulWidget {
   const ContactListScreen({super.key});
 
   @override
-  _ContactListScreenState createState() => _ContactListScreenState();
+  ContactListScreenState createState() => ContactListScreenState();
 }
 
-class _ContactListScreenState extends State<ContactListScreen> {
+class ContactListScreenState extends State<ContactListScreen> {
   List<Contact> _contacts = [];
   List<Contact> _filteredContacts = [];
   final List<Contact> _selectedContacts = [];
@@ -46,15 +45,15 @@ class _ContactListScreenState extends State<ContactListScreen> {
     }
   }
 
-  void _filterContacts() {
-    final query = _searchController.text.toLowerCase();
-    setState(() {
-      _filteredContacts = _contacts.where((contact) {
-        final name = contact.displayName.toLowerCase();
-        return name.contains(query);
-      }).toList();
-    });
-  }
+  // void _filterContacts() {
+  //   final query = _searchController.text.toLowerCase();
+  //   setState(() {
+  //     _filteredContacts = _contacts.where((contact) {
+  //       final name = contact.displayName.toLowerCase();
+  //       return name.contains(query);
+  //     }).toList();
+  //   });
+  // }
 
   void _toggleSelection(Contact contact) {
     setState(() {
@@ -86,6 +85,16 @@ class _ContactListScreenState extends State<ContactListScreen> {
     return "?";
   }
 
+  void _filterContacts() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredContacts = _contacts.where((contact) {
+        final name = contact.displayName.toLowerCase();
+        return name.contains(query);
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,9 +108,8 @@ class _ContactListScreenState extends State<ContactListScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.check,
-                color:
-                    _selectedContacts.length < 2 ? Colors.grey : Colors.white),
-            onPressed: _selectedContacts.length < 2
+                color: _selectedContacts.isEmpty ? Colors.grey : Colors.white),
+            onPressed: _selectedContacts.isEmpty
                 ? () {}
                 : _navigateToSelectedContactsScreen,
           ),
@@ -124,44 +132,52 @@ class _ContactListScreenState extends State<ContactListScreen> {
           ),
         ),
       ),
-      body: _filteredContacts.isEmpty
+      body: _contacts.isEmpty
           ? const Center(
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Text("Wait a while, process takes some time!")
-              ],
-            ))
-          : ListView.builder(
-              itemCount: _filteredContacts.length,
-              itemBuilder: (context, index) {
-                Contact contact = _filteredContacts[index];
-                bool isSelected = _selectedContacts.contains(contact);
-                return ListTile(
-                  title: Text(contact.displayName),
-                  subtitle: Text(contact.phones.isNotEmpty
-                      ? contact.phones.map((e) => e.number).join(", ")
-                      : 'No phone number'),
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    backgroundImage: contact.thumbnail != null
-                        ? MemoryImage(contact.thumbnail!)
-                        : null,
-                    child: contact.thumbnail == null
-                        ? Text(
-                            _getInitials(contact.displayName),
-                            style: const TextStyle(color: Colors.white),
-                          )
-                        : null,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  Text("Wait a while, process takes some time!")
+                ],
+              ),
+            )
+          : _filteredContacts.isEmpty && _searchController.text.isNotEmpty
+              ? const Center(
+                  child: Text(
+                    'No contacts found with the provided name.',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
                   ),
-                  trailing: isSelected
-                      ? const Icon(Icons.check_box)
-                      : const Icon(Icons.check_box_outline_blank),
-                  onTap: () => _toggleSelection(contact),
-                );
-              },
-            ),
+                )
+              : ListView.builder(
+                  itemCount: _filteredContacts.length,
+                  itemBuilder: (context, index) {
+                    Contact contact = _filteredContacts[index];
+                    bool isSelected = _selectedContacts.contains(contact);
+                    return ListTile(
+                      title: Text(contact.displayName),
+                      subtitle: Text(contact.phones.isNotEmpty
+                          ? contact.phones.map((e) => e.number).join(", ")
+                          : 'No phone number'),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.blue,
+                        backgroundImage: contact.thumbnail != null
+                            ? MemoryImage(contact.thumbnail!)
+                            : null,
+                        child: contact.thumbnail == null
+                            ? Text(
+                                _getInitials(contact.displayName),
+                                style: const TextStyle(color: Colors.white),
+                              )
+                            : null,
+                      ),
+                      trailing: isSelected
+                          ? const Icon(Icons.check_box)
+                          : const Icon(Icons.check_box_outline_blank),
+                      onTap: () => _toggleSelection(contact),
+                    );
+                  },
+                ),
     );
   }
 
