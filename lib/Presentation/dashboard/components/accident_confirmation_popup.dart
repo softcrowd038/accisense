@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'package:accident/Presentation/Accident_Detection/services/accident_detection_provider.dart';
 import 'package:accident/Presentation/Navigation/page_navigation.dart';
@@ -29,8 +31,13 @@ class _AccidentPopupState extends State<AccidentPopup> {
       if (_counter == 0) {
         timer.cancel();
         widget.onTimeout();
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (route) => false,
+          );
+        }
       } else {
         setState(() {
           _counter--;
@@ -74,7 +81,7 @@ class _AccidentPopupState extends State<AccidentPopup> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "AcciSense",
+                    "Accidetect",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -89,64 +96,55 @@ class _AccidentPopupState extends State<AccidentPopup> {
       body: Stack(
         children: [
           Center(
-            child: Consumer<AccidentDetectionProvider>(
-              builder: (context, value, _) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Are you safe?",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Auto-confirming in:",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black.withOpacity(0.2),
-                    ),
-                    child: Text(
-                      "$_counter",
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff020053),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      AwesomeNotifications flutterLocalNotificationsPlugin =
-                          AwesomeNotifications();
-                      _timer?.cancel();
-                      flutterLocalNotificationsPlugin.cancel(10);
-                      value.notificationCancelled = true;
-                      Navigator.of(context).pop();
-                      context
-                          .read<AccidentDetectionProvider>()
-                          .resetPopupState(); // Reset state
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      textStyle: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    child: const Text(
-                      "I'm Safe",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+              child: Consumer<AccidentDetectionProvider>(
+                  builder: (context, value, _) =>
+                      Column(mainAxisSize: MainAxisSize.min, children: [
+                        const Text(
+                          "Are you safe?",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Auto-confirming in:",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xff020053).withOpacity(0.2),
+                          ),
+                          child: Text(
+                            "$_counter",
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff020053),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            AwesomeNotifications
+                                flutterLocalNotificationsPlugin =
+                                AwesomeNotifications();
+                            _timer?.cancel();
+                            flutterLocalNotificationsPlugin.cancel(10);
+                            value.notificationCancelled = true;
+
+                            if (mounted) {
+                              Navigator.of(context).pop();
+                              context
+                                  .read<AccidentDetectionProvider>()
+                                  .resetPopupState();
+                            }
+                          },
+                          child: const Text("I'm Safe"),
+                        )
+                      ]))),
         ],
       ),
     );

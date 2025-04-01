@@ -96,7 +96,7 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setemergencyContacts(List<EmergencyContact> value) {
+  void setEmergencyContacts(List<EmergencyContact> value) {
     _emergencyContacts = value;
     notifyListeners();
   }

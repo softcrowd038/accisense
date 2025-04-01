@@ -101,7 +101,7 @@ class _SelectedContactsScreenState extends State<SelectedContactsScreen> {
                             String contactName = contact.displayName;
                             final contactDetails =
                                 Provider.of<User>(context, listen: false);
-                            contactDetails.setemergencyContacts([
+                            contactDetails.setEmergencyContacts([
                               EmergencyContact(
                                   name: contactName,
                                   relation: value,

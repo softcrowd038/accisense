@@ -19,8 +19,6 @@ class EditProfileDetails extends StatefulWidget {
 
 class _EditProfileDetailsState extends State<EditProfileDetails> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _allergiesController = TextEditingController();
-  final TextEditingController _medicalHistory = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _guardianController = TextEditingController();
   final TextEditingController _relationController = TextEditingController();
@@ -40,8 +38,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
   @override
   void dispose() {
     _nameController.dispose();
-    _allergiesController.dispose();
-    _medicalHistory.dispose();
+
     _phoneController.dispose();
     _guardianController.dispose();
     _relationController.dispose();
@@ -54,29 +51,22 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
     _user?.setName(value);
   }
 
-  void _updateAllergies(List<String> value) {
-    Provider.of<User>(context, listen: false).setAllergies(value);
-  }
-
-  void _updateMedicalHistory(List<String> value) {
-    Provider.of<User>(context, listen: false).setMedicalHistory(value);
-  }
-
   void _updatePhone(String value) {
     _user?.setMobileNumber(value);
   }
 
-  void _updateEmergencyContactName(String value) {
-    _user!.setemergencyContacts([
-      EmergencyContact(
-          name: value,
-          relation: _userData!.emergencyContacts!.first.relation,
-          mobile: _userData!.emergencyContacts!.first.mobile)
-    ]);
+  void _updateEmergencyContactName(String newName, int index) {
+    if (_user!.emergencyContacts.isNotEmpty &&
+        index < _user!.emergencyContacts.length) {
+      _user!.emergencyContacts[index].name = newName;
+      _user!.setEmergencyContacts([..._user!.emergencyContacts]);
+    } else {
+      print("Error: Emer_gency contact list is empty or index out of bounds");
+    }
   }
 
   void _updateRelation(String value) {
-    _user!.setemergencyContacts([
+    _user!.setEmergencyContacts([
       EmergencyContact(
           name: _userData!.emergencyContacts!.first.name,
           relation: value,
@@ -85,7 +75,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
   }
 
   void _updateEmergencyPhone(String value) {
-    _user!.setemergencyContacts([
+    _user!.setEmergencyContacts([
       EmergencyContact(
           name: _userData!.emergencyContacts!.first.name,
           relation: _userData!.emergencyContacts!.first.relation,
@@ -106,11 +96,10 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
           _userData = userProfileDetails;
         });
       }
-      print(_user?.image);
+
       setState(() {
         _nameController.text = _userData!.name ?? '';
-        _allergiesController.text = _userData!.allergies!.first;
-        _medicalHistory.text = _userData!.medicalHistory!.first;
+
         _phoneController.text = _userData!.mobileNumber ?? '';
         _guardianController.text = _userData!.emergencyContacts!.first.name;
         _relationController.text = _userData!.emergencyContacts!.first.relation;
@@ -127,28 +116,22 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
     if (_formKey.currentState!.validate()) {
       final user = Provider.of<User>(context, listen: false);
       try {
-        print(user.image);
         final Map<String, dynamic> updatedFields = {
           'name': _nameController.text,
           'address': _addressController.text,
-          'image': user.image,
-          'allergies': _allergiesController.text
-              .split(',')
-              .map((e) => e.trim())
-              .toList(),
-          'medical_history':
-              _medicalHistory.text.split(',').map((e) => e.trim()).toList(),
           'mobile_number': _phoneController.text,
+          'image': user.image,
           'emergency_contacts': [
             {
               'name': _guardianController.text,
               'relation': _relationController.text,
               'mobile': _emergencyPhoneController.text,
-            },
+            }
           ],
         };
 
         UserRegistrationLogin userRegistrationLogin = UserRegistrationLogin();
+
         final updatedUser =
             await userRegistrationLogin.updateUser(context, updatedFields);
 
@@ -243,58 +226,6 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                       padding: const EdgeInsets.all(8.0),
                       child: CustomTextField(
                         onChanged: (value) {
-                          _updateAllergies(
-                              value.split(',').map((e) => e.trim()).toList());
-                        },
-                        obscureText: false,
-                        hint: "e.g. \"penicillin\", \"dust\"",
-                        label: "allergies",
-                        controller: _allergiesController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Enter your allergies first!";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.text,
-                        color: Colors.black,
-                        suffixIcon: Icon(
-                          Icons.vaccines,
-                          color: Colors.black,
-                          size: MediaQuery.of(context).size.height * 0.025,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomTextField(
-                        onChanged: (value) {
-                          _updateMedicalHistory(
-                              value.split(',').map((e) => e.trim()).toList());
-                        },
-                        obscureText: false,
-                        hint: "e.g. Asthama",
-                        label: "Medical History",
-                        controller: _medicalHistory,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Enter your Details first!";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.text,
-                        color: Colors.black,
-                        suffixIcon: Icon(
-                          Icons.medical_information,
-                          color: Colors.black,
-                          size: MediaQuery.of(context).size.height * 0.025,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomTextField(
-                        onChanged: (value) {
                           _updatePhone(value);
                         },
                         obscureText: false,
@@ -320,7 +251,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
                       padding: const EdgeInsets.all(8.0),
                       child: CustomTextField(
                         onChanged: (value) {
-                          _updateEmergencyContactName(value);
+                          _updateEmergencyContactName(value, 1);
                         },
                         obscureText: false,
                         hint: "eg. Alex Doe",

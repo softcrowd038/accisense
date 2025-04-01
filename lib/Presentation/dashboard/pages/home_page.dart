@@ -50,13 +50,16 @@ class _MainPageState extends State<MainPage> {
     _detected!.addListener(_accidentListener);
 
     if (_detected!.isAccidentDetected && !_isPopupOpen) {
-      _navigateToAccidentPopup();
+      Future.delayed(Duration.zero, () {
+        _navigateToAccidentPopup();
+      });
     }
   }
 
   void _accidentListener() {
     if (!mounted) return;
     if (_detected!.isAccidentDetected && !_isPopupOpen) {
+      _isPopupOpen = true;
       _navigateToAccidentPopup();
     }
   }
@@ -70,6 +73,7 @@ class _MainPageState extends State<MainPage> {
         builder: (context) => AccidentPopup(
           onTimeout: () {
             _isPopupOpen = false;
+            _detected?.resetAccidentDetection();
           },
         ),
       ),
@@ -105,6 +109,21 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: const LiveLocationTracker(),
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
+              child: Text(
+                'Statistics and Helpline',
+                style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).height * 0.022,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,11 +250,6 @@ class _MainPageState extends State<MainPage> {
             Padding(
               padding:
                   EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
-              child: const LiveLocationTracker(),
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.008),
               child: Text(
                 'God\'s Message For you',
                 style: TextStyle(
@@ -251,7 +265,7 @@ class _MainPageState extends State<MainPage> {
                   CircleAvatar(
                     radius: MediaQuery.sizeOf(context).height * 0.03,
                     backgroundImage: const NetworkImage(
-                      'https://i.extremetech.com/imagery/content-types/01f371QWyg1FNTST7mnZm0S/images-13.jpg',
+                      'https://img.freepik.com/free-vector/black-background-with-glowing-light-effect_1017-30649.jpg',
                     ),
                   ),
                   SizedBox(width: MediaQuery.sizeOf(context).height * 0.008),

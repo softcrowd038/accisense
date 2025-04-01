@@ -83,7 +83,7 @@ class UserRegistrationLogin {
             .setAllergies(List<String>.from(jsonResponse['allergies'] ?? []));
         registeredUser.setMedicalHistory(
             List<String>.from(jsonResponse['medical_history'] ?? []));
-        registeredUser.setemergencyContacts(
+        registeredUser.setEmergencyContacts(
           (jsonResponse['emergency_contacts'] ?? [])
               .map<EmergencyContact>(
                 (contactJson) => EmergencyContact.fromJson(contactJson),
@@ -169,79 +169,85 @@ class UserRegistrationLogin {
 
     try {
       final request = http.MultipartRequest('POST', url);
-
       request.headers['Authorization'] = 'Bearer $authToken';
       request.headers['Accept'] = 'application/json';
 
-      // updatedFields.forEach((key, value) {
-      //   if (value is List) {
-      //     request.fields[key] = jsonEncode(value);
-      //   } else {
-      //     request.fields[key] = value.toString();
-      //   }
-      // });
+      if (updatedFields['emergency_contacts'] != null) {
+        print(
+            "Emergency Contacts Before Sending: ${updatedFields['emergency_contacts']}");
 
-      if (user.image != null) {
+        List<Map<String, dynamic>> formattedContacts = [];
+
+        if (updatedFields['emergency_contacts'] is List<EmergencyContact>) {
+          formattedContacts =
+              (updatedFields['emergency_contacts'] as List<EmergencyContact>)
+                  .map((e) => e.toJson())
+                  .toList();
+        } else if (updatedFields['emergency_contacts']
+            is List<Map<String, dynamic>>) {
+          formattedContacts = List<Map<String, dynamic>>.from(
+              updatedFields['emergency_contacts']);
+        }
+
+        // Ensure it is sent correctly with []
+        for (int i = 0; i < formattedContacts.length; i++) {
+          formattedContacts[i].forEach((key, value) {
+            request.fields['emergency_contacts[$i][$key]'] = value.toString();
+          });
+        }
+      }
+
+      updatedFields.forEach((key, value) {
+        if (key != 'image' && key != 'emergency_contacts' && value != null) {
+          request.fields[key] = value.toString();
+        }
+      });
+
+      if (updatedFields['image'] != null && updatedFields['image'] is File) {
         request.files.add(
-          await http.MultipartFile.fromPath('image', user.image!.path),
+          await http.MultipartFile.fromPath(
+              'image', (updatedFields['image'] as File).path),
         );
       }
 
-      print("Sending Data: ${updatedFields.toString()}");
+      print("Sending Data: ${request.fields}");
 
       final response = await request.send();
-
       final responseData = await response.stream.bytesToString();
+
       print("Response Status Code: ${response.statusCode}");
       print("Response Body: $responseData");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print('User updated successfully');
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
 
         final jsonResponse = json.decode(responseData);
 
-        if (jsonResponse['username'] != null) {
-          user.setUsername(jsonResponse['username']);
-        }
-        if (jsonResponse['email'] != null) {
-          user.setEmail(jsonResponse['email']);
-        }
-        if (jsonResponse['name'] != null) {
-          user.setName(jsonResponse['name']);
-        }
+        if (jsonResponse['name'] != null) user.setName(jsonResponse['name']);
         if (jsonResponse['address'] != null) {
           user.setAddress(jsonResponse['address']);
         }
         if (jsonResponse['mobile_number'] != null) {
           user.setMobileNumber(jsonResponse['mobile_number']);
         }
-        if (jsonResponse['age'] != null) {
-          user.setAge(jsonResponse['age']);
-        }
-        if (jsonResponse['gender'] != null) {
-          user.setGender(jsonResponse['gender']);
-        }
+
         if (jsonResponse['image'] != null && jsonResponse['image'].isNotEmpty) {
           user.setImage(File(jsonResponse['image']));
         }
-        if (jsonResponse['allergies'] != null) {
-          user.setAllergies(
-              List<String>.from(jsonResponse['allergies']).toList());
-        }
-        if (jsonResponse['medical_history'] != null) {
-          user.setMedicalHistory(
-              List<String>.from(jsonResponse['medical_history']).toList());
-        }
         if (jsonResponse['emergency_contacts'] != null) {
-          user.setemergencyContacts(
-            (jsonResponse['emergency_contacts'] ?? []).map<EmergencyContact>(
-              (contactJson) => EmergencyContact.fromJson(contactJson),
-            ),
+          print("Updating Emergency Contacts in Provider");
+
+          user.setEmergencyContacts(
+            (jsonResponse['emergency_contacts'] as List)
+                .map<EmergencyContact>(
+                    (contactJson) => EmergencyContact.fromJson(contactJson))
+                .toList(),
           );
         }
-        print(user);
 
         return user;
       } else {
